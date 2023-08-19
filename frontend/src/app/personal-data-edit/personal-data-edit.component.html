@@ -1,0 +1,53 @@
+<form [formGroup]="editForm" (submit)="submitEdit()">
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="firstname"
+            type="text"
+            formControlName="firstname"
+            class="form-control"
+            placeholder=""
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+        />
+        <label for="firstname">First name</label>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="surname"
+            type="text"
+            formControlName="surname"
+            class="form-control"
+            placeholder=""
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+        />
+        <label for="surname">Surname</label>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-control"
+            placeholder=""
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+        />
+        <label for="email">Email</label>
+    </div>
+    <div class="d-flex placeholder-glow" style="gap: 1rem;">
+        <button
+            type="button"
+            class="btn btn-danger w-50"
+            (click)="cancel()"
+        >Cancel
+        </button>
+        <button
+            type="submit"
+            class="btn btn-primary w-50"
+            [disabled]="loading"
+            [class.placeholder]="loading"
+        >Confirm
+        </button>
+    </div>
+</form>

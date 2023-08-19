@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+    <pagination
+        [disabled]="loading"
+        [totalItems]="totalItems"
+        [itemsPerPage]="pageSize"
+        [ngModel]="currentPaginationPage"
+        [maxSize]="9"
+        [rotate]="false"
+        (pageChanged)="pageChanged($event)"
+    ></pagination>
+</div>
+
+<div class="d-flex justify-content-center">
+    <accordion
+        [isAnimated]="true"
+        [closeOthers]="true"
+        class="w-100"
+        style="max-width: 50rem"
+    >
+        <accordion-group
+            *ngFor="let data of personalData; let i = index"
+            class="p-1"
+            [isOpen]="highlightIndex == i"
+        >
+            <span accordion-heading>
+                <div class="d-flex flex-column">
+                    <h5>{{ data.firstname }} {{ data.surname }}</h5>
+                    <i class="text-muted">{{ data.email }}</i>
+                </div>
+            </span>
+
+            <div class="d-flex flex-row-reverse">
+                <div class="btn-group">
+                    <button
+                        (click)="edit(data)"
+                        type="button"
+                        class="btn btn-outline-warning"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        (click)="delete(data)"
+                        type="button"
+                        class="btn btn-outline-danger"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </accordion-group>
+    </accordion>
+</div>
+
+<div class="text-center">
+    <div
+        class="spinner-border text-primary"
+        role="status"
+        *ngIf="loading && !personalData"
+    ></div>
+</div>

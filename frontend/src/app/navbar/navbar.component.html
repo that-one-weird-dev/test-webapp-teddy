@@ -1,0 +1,10 @@
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" [routerLink]="['/']">People & Data</a>
+        <ul class="navbar-nav">
+            <li class="navbar-item" *ngIf="isAddDataVisible()">
+                <a [routerLink]="['/add']" class="btn btn-primary">Add data</a>
+            </li>
+        </ul>
+    </div>
+</nav>
