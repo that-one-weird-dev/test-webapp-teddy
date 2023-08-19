@@ -10,14 +10,28 @@ import { PersonalDataFilter } from "../personal-data-filter";
 export class PersonalDataFilterComponent {
     @Output() filtersChanged = new EventEmitter<typeof this.filters>();
 
-    filters: PersonalDataFilter[] = [];
+    filters: PersonalDataFilter[] = [
+        {
+            type: "email",
+            value: "no",
+        },
+        {
+            type: "firstname",
+            value: "yes"
+        }
+    ];
 
     propertyForm = new FormGroup({
         type: new FormControl<keyof PersonalData>("firstname"),
         value: new FormControl(""),
     });
 
-    submitProperty(event: SubmitEvent) {
+    removeFilter(filter: PersonalDataFilter) {
+        this.filters = this.filters.filter(f => f != filter);
+        this.filtersChanged.emit(this.filters);
+    }
+
+    submitFilter(event: SubmitEvent) {
         this.propertyForm.value.value
             ?.split(" ")
             .filter((tag) => tag.length > 0)

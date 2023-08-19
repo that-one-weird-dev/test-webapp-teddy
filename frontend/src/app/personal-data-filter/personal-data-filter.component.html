@@ -1,5 +1,5 @@
 <div>
-    <form [formGroup]="propertyForm" (submit)="submitProperty($event)">
+    <form [formGroup]="propertyForm" (submit)="submitFilter($event)">
         <div class="input-group mb-3">
             <div class="btn-group" dropdown>
                 <button
@@ -58,9 +58,19 @@
         </div>
     </form>
 
-    <div>
-        <div *ngFor="let filter of filters">
-            <strong>{{ filter.type }}:</strong> {{ filter.value }}
+    <div class="container">
+        <div class="row">
+            <div
+                class="col-sm-auto col-md-auto bg-primary rounded-pill m-1 d-flex pt-1 pb-1"
+                style="gap: 0.4rem"
+                role="button"
+                *ngFor="let filter of filters"
+                (click)="removeFilter(filter)"
+            >
+                {{ filter.type }}
+                <div class="vr"></div>
+                <strong>{{ filter.value }}</strong>
+            </div>
         </div>
     </div>
 </div>

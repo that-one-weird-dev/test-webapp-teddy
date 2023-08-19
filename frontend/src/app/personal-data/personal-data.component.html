@@ -1,56 +1,57 @@
-<personal-data-filter (filtersChanged)="updateFilters($event)"></personal-data-filter>
+<div class="d-flex justify-content-center w-100">
+    <div class="d-flex flex-column w-100" style="max-width: 50rem">
+        <div class="pb-4">
+            <personal-data-filter
+                (filtersChanged)="updateFilters($event)"
+            ></personal-data-filter>
+        </div>
 
-<div class="d-flex justify-content-center">
-    <pagination
-        [disabled]="loading"
-        [totalItems]="totalItems"
-        [itemsPerPage]="pageSize"
-        [ngModel]="currentPaginationPage"
-        [maxSize]="9"
-        [rotate]="false"
-        (pageChanged)="pageChanged($event)"
-    ></pagination>
-</div>
+        <div class="d-flex justify-content-center">
+            <pagination
+                [disabled]="loading"
+                [totalItems]="totalItems"
+                [itemsPerPage]="pageSize"
+                [ngModel]="currentPaginationPage"
+                [maxSize]="9"
+                [rotate]="false"
+                (pageChanged)="pageChanged($event)"
+            ></pagination>
+        </div>
 
-<div class="d-flex justify-content-center">
-    <accordion
-        [isAnimated]="true"
-        [closeOthers]="true"
-        class="w-100"
-        style="max-width: 50rem"
-    >
-        <accordion-group
-            *ngFor="let data of personalData"
-            class="p-1"
-            [isOpen]="highlightId == data.id"
-        >
-            <span accordion-heading>
-                <div class="d-flex flex-column">
-                    <h5>{{ data.firstname }} {{ data.surname }}</h5>
-                    <i class="text-muted">{{ data.email }}</i>
+        <accordion [isAnimated]="true" [closeOthers]="true" class="w-100">
+            <accordion-group
+                *ngFor="let data of personalData"
+                class="p-1"
+                [isOpen]="highlightId == data.id"
+            >
+                <span accordion-heading>
+                    <div class="d-flex flex-column">
+                        <h5>{{ data.firstname }} {{ data.surname }}</h5>
+                        <i class="text-muted">{{ data.email }}</i>
+                    </div>
+                </span>
+
+                <div class="d-flex flex-row-reverse">
+                    <div class="btn-group">
+                        <button
+                            (click)="edit(data)"
+                            type="button"
+                            class="btn btn-outline-warning"
+                        >
+                            Edit
+                        </button>
+                        <button
+                            (click)="delete(data)"
+                            type="button"
+                            class="btn btn-outline-danger"
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </div>
-            </span>
-
-            <div class="d-flex flex-row-reverse">
-                <div class="btn-group">
-                    <button
-                        (click)="edit(data)"
-                        type="button"
-                        class="btn btn-outline-warning"
-                    >
-                        Edit
-                    </button>
-                    <button
-                        (click)="delete(data)"
-                        type="button"
-                        class="btn btn-outline-danger"
-                    >
-                        Delete
-                    </button>
-                </div>
-            </div>
-        </accordion-group>
-    </accordion>
+            </accordion-group>
+        </accordion>
+    </div>
 </div>
 
 <div class="text-center">
