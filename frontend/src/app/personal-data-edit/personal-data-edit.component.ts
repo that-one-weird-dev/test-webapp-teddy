@@ -30,7 +30,7 @@ export class PersonalDataEditComponent implements OnInit {
 
     submitForm() {
         const data: PersonalData = {
-            id: this.personalData?.id ?? 0,
+            id: this.personalData?.id ?? '',
             firstname: this.editForm.value.firstname ?? "",
             surname: this.editForm.value.surname ?? "",
             email: this.editForm.value.email ?? "",

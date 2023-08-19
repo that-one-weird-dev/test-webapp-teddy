@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { PersonalData } from "./personal-data";
+import { PersonalDataFilter } from "./personal-data-filter";
 
 export interface PaginatedPersonalData {
     personalData: PersonalData[];
@@ -17,10 +18,15 @@ export class PersonalDataService {
 
     async getPaginatedPersonalData(
         page: number,
-        limit: number
+        limit: number,
+        filters: PersonalDataFilter[] = []
     ): Promise<PaginatedPersonalData> {
+        const filterString = filters.reduce((filterString, filter) => {
+            return filterString + `&${filter.type}_like=${filter.value}`;
+        }, "");
+
         const data = await fetch(
-            `${this.personalDataUrl}?_page=${page}&_limit=${limit}`
+            `${this.personalDataUrl}?_page=${page}&_limit=${limit}${filterString}`
         );
 
         return {
@@ -54,7 +60,7 @@ export class PersonalDataService {
         });
     }
 
-    async deletePersonalData(id: number) {
+    async deletePersonalData(id: string) {
         await fetch(`${this.personalDataUrl}/${id}`, {
             method: "DELETE",
         });

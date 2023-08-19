@@ -1,0 +1,66 @@
+<div>
+    <form [formGroup]="propertyForm" (submit)="submitProperty($event)">
+        <div class="input-group mb-3">
+            <div class="btn-group" dropdown>
+                <button
+                    id="button-basic"
+                    class="btn btn-outline-secondary dropdown-toggle"
+                    type="button"
+                    dropdownToggle
+                    aria-controls="dropdown-basic"
+                >
+                    {{ propertyForm.value.type }}
+                    <span class="caret"></span>
+                </button>
+                <ul
+                    id="dropdown-basic"
+                    class="dropdown-menu"
+                    *dropdownMenu
+                    role="menu"
+                    aria-labelledby="button-basic"
+                >
+                    <li role="menuitem">
+                        <button
+                            class="dropdown-item"
+                            type="button"
+                            (click)="
+                                propertyForm.controls.type.setValue('firstname')
+                            "
+                        >
+                            First name
+                        </button>
+                    </li>
+                    <li role="menuitem">
+                        <button
+                            class="dropdown-item"
+                            type="button"
+                            (click)="
+                                propertyForm.controls.type.setValue('surname')
+                            "
+                        >
+                            Surname
+                        </button>
+                    </li>
+                    <li role="menuitem">
+                        <button
+                            class="dropdown-item"
+                            type="button"
+                            (click)="
+                                propertyForm.controls.type.setValue('email')
+                            "
+                        >
+                            Email
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <input type="text" class="form-control" formControlName="value" />
+        </div>
+    </form>
+
+    <div>
+        <div *ngFor="let filter of filters">
+            <strong>{{ filter.type }}:</strong> {{ filter.value }}
+        </div>
+    </div>
+</div>

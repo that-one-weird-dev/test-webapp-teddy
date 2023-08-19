@@ -7,9 +7,12 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { PersonalDataComponent } from "./personal-data/personal-data.component";
 import { PersonalDataEditComponent } from "./personal-data-edit/personal-data-edit.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { AccordionModule } from 'ngx-bootstrap/accordion';
-import { NavbarComponent } from './navbar/navbar.component';
+import { PaginationModule } from "ngx-bootstrap/pagination";
+import { AccordionModule } from "ngx-bootstrap/accordion";
+import { NavbarComponent } from "./navbar/navbar.component";
+import { BsDropdownConfig, BsDropdownDirective, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { CommonModule } from "@angular/common";
+import { PersonalDataFilterComponent } from './personal-data-filter/personal-data-filter.component';
 
 @NgModule({
     declarations: [
@@ -17,17 +20,22 @@ import { NavbarComponent } from './navbar/navbar.component';
         PersonalDataComponent,
         PersonalDataEditComponent,
         NavbarComponent,
+        PersonalDataFilterComponent,
     ],
     imports: [
         BrowserModule,
+        CommonModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
         PaginationModule.forRoot(),
         FormsModule,
         AccordionModule.forRoot(),
+        BsDropdownModule.forRoot(),
     ],
-    providers: [],
+    providers: [
+        { provide: BsDropdownDirective, useValue: { autoClose: true} }
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

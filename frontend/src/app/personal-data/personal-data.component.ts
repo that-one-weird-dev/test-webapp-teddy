@@ -4,6 +4,7 @@ import { PersonalDataService } from "../personal-data.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import Swal from "sweetalert2";
+import { PersonalDataFilter } from "../personal-data-filter";
 
 @Component({
     selector: "personal-data",
@@ -22,6 +23,8 @@ export class PersonalDataComponent implements OnInit {
     totalItems: number = 100;
     loading: boolean = true;
     highlightId?: string;
+
+    filters: PersonalDataFilter[] = [];
 
     personalData!: PersonalData[];
     personalDataService: PersonalDataService = inject(PersonalDataService);
@@ -47,10 +50,17 @@ export class PersonalDataComponent implements OnInit {
         await this.updateData()
     }
 
+    async updateFilters(filters: PersonalDataFilter[]) {
+        this.filters = filters;
+        this.currentPage = 1;
+        this.updateData();
+    }
+
     async updateData() {
         const data = await this.personalDataService.getPaginatedPersonalData(
             this.currentPage,
-            this.pageSize
+            this.pageSize,
+            this.filters,
         );
 
         this.personalData = data.personalData;

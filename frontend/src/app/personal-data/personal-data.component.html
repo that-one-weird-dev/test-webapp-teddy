@@ -1,3 +1,5 @@
+<personal-data-filter (filtersChanged)="updateFilters($event)"></personal-data-filter>
+
 <div class="d-flex justify-content-center">
     <pagination
         [disabled]="loading"
@@ -18,8 +20,9 @@
         style="max-width: 50rem"
     >
         <accordion-group
-            *ngFor="let data of personalData; let i = index"
+            *ngFor="let data of personalData"
             class="p-1"
+            [isOpen]="highlightId == data.id"
         >
             <span accordion-heading>
                 <div class="d-flex flex-column">
