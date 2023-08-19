@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from "@angular/core";
 import { PersonalData } from "../personal-data";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PersonalDataFilter } from "../personal-data-filter";
+import { PersonalDataSort } from "../personal-data-sort";
 
 @Component({
     selector: "personal-data-filter",
@@ -9,25 +10,29 @@ import { PersonalDataFilter } from "../personal-data-filter";
 })
 export class PersonalDataFilterComponent {
     @Output() filtersChanged = new EventEmitter<typeof this.filters>();
+    @Output() sortChanged = new EventEmitter<typeof this.sort>();
 
-    filters: PersonalDataFilter[] = [
-        {
-            type: "email",
-            value: "no",
-        },
-        {
-            type: "firstname",
-            value: "yes"
-        }
-    ];
+    filters: PersonalDataFilter[] = [];
+    sort: PersonalDataSort = {
+        key: "firstname",
+        order: "ascending",
+    };
 
     propertyForm = new FormGroup({
         type: new FormControl<keyof PersonalData>("firstname"),
         value: new FormControl(""),
     });
 
+    updateSort(sortOverlay: Partial<PersonalDataSort>) {
+        this.sort = {
+            ...this.sort,
+            ...sortOverlay,
+        };
+        this.sortChanged.emit(this.sort);
+    }
+
     removeFilter(filter: PersonalDataFilter) {
-        this.filters = this.filters.filter(f => f != filter);
+        this.filters = this.filters.filter((f) => f != filter);
         this.filtersChanged.emit(this.filters);
     }
 
@@ -41,7 +46,7 @@ export class PersonalDataFilterComponent {
                     value: tag,
                 });
             });
-        
+
         this.filtersChanged.emit(this.filters);
 
         this.propertyForm.setValue({

@@ -1,7 +1,9 @@
-<div>
+<div class="d-flex flex-row justify-content-between" style="gap: 1rem;">
     <form [formGroup]="propertyForm" (submit)="submitFilter($event)">
-        <div class="input-group mb-3">
-            <div class="btn-group" dropdown>
+        <div class="input-group">
+            <span class="input-group-text">Filter</span>
+
+            <div dropdown>
                 <button
                     id="button-basic"
                     class="btn btn-outline-secondary dropdown-toggle"
@@ -58,19 +60,114 @@
         </div>
     </form>
 
-    <div class="container">
-        <div class="row">
-            <div
-                class="col-sm-auto col-md-auto bg-primary rounded-pill m-1 d-flex pt-1 pb-1"
-                style="gap: 0.4rem"
-                role="button"
-                *ngFor="let filter of filters"
-                (click)="removeFilter(filter)"
+    <div class="input-group w-auto">
+        <span class="input-group-text">Sort by</span>
+
+        <div dropdown>
+            <button
+                id="button-sort"
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
+                dropdownToggle
+                aria-controls="dropdown-sort"
             >
-                {{ filter.type }}
-                <div class="vr"></div>
-                <strong>{{ filter.value }}</strong>
-            </div>
+                {{ sort.key }}
+                <span class="caret"></span>
+            </button>
+            <ul
+                id="dropdown-sort"
+                class="dropdown-menu"
+                *dropdownMenu
+                role="menu"
+                aria-labelledby="button-sort"
+            >
+                <li role="menuitem">
+                    <button
+                        class="dropdown-item"
+                        type="button"
+                        (click)="updateSort({ key: 'firstname' })"
+                    >
+                        First name
+                    </button>
+                </li>
+                <li role="menuitem">
+                    <button
+                        class="dropdown-item"
+                        type="button"
+                        (click)="updateSort({ key: 'surname' })"
+                    >
+                        Surname
+                    </button>
+                </li>
+                <li role="menuitem">
+                    <button
+                        class="dropdown-item"
+                        type="button"
+                        (click)="updateSort({ key: 'email' })"
+                    >
+                        Email
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <span class="input-group-text">In</span>
+
+        <div dropdown>
+            <button
+                id="button-order"
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
+                dropdownToggle
+                aria-controls="dropdown-order"
+            >
+                {{ sort.order }}
+                <span class="caret"></span>
+            </button>
+            <ul
+                id="dropdown-order"
+                class="dropdown-menu"
+                *dropdownMenu
+                role="menu"
+                aria-labelledby="button-order"
+            >
+                <li role="menuitem">
+                    <button
+                        class="dropdown-item"
+                        type="button"
+                        (click)="updateSort({ order: 'ascending' })"
+                    >
+                        Ascending
+                    </button>
+                </li>
+                <li role="menuitem">
+                    <button
+                        class="dropdown-item"
+                        type="button"
+                        (click)="updateSort({ order: 'descending' })"
+                    >
+                        Descending
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <span class="input-group-text">Order</span>
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="row">
+        <div
+            class="col-sm-auto col-md-auto bg-primary rounded-pill m-1 d-flex pt-1 pb-1"
+            style="gap: 0.4rem"
+            role="button"
+            *ngFor="let filter of filters"
+            (click)="removeFilter(filter)"
+        >
+            {{ filter.type }}
+            <div class="vr"></div>
+            <strong>{{ filter.value }}</strong>
         </div>
     </div>
 </div>

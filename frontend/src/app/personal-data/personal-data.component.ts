@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import Swal from "sweetalert2";
 import { PersonalDataFilter } from "../personal-data-filter";
+import { PersonalDataSort } from "../personal-data-sort";
 
 @Component({
     selector: "personal-data",
@@ -17,7 +18,7 @@ export class PersonalDataComponent implements OnInit {
     /** and this is the page that the pagination component displays.
      *  This is used because otherwise the pagination component would fire a pageChanged event
      *  every time the currentPage is changed meaning double the rest api calls, which is no good :(
-    */
+     */
     currentPaginationPage: number = 1;
     pageSize: number = 10;
     totalItems: number = 100;
@@ -25,6 +26,7 @@ export class PersonalDataComponent implements OnInit {
     highlightId?: string;
 
     filters: PersonalDataFilter[] = [];
+    sort: PersonalDataSort = { key: "firstname", order: "ascending" };
 
     personalData!: PersonalData[];
     personalDataService: PersonalDataService = inject(PersonalDataService);
@@ -45,15 +47,25 @@ export class PersonalDataComponent implements OnInit {
 
         if (!result.isConfirmed) return;
 
-        this.loading = true
+        this.loading = true;
         await this.personalDataService.deletePersonalData(data.id);
-        await this.updateData()
+        await this.updateData();
     }
 
-    async updateFilters(filters: PersonalDataFilter[]) {
+    updateFilters(filters: PersonalDataFilter[]) {
         this.filters = filters;
         this.currentPage = 1;
+        this.loading = true;
         this.updateData();
+        this.highlightId = undefined;
+    }
+
+    updateSort(sort: PersonalDataSort) {
+        this.sort = sort;
+        this.currentPage = 1;
+        this.loading = true;
+        this.updateData();
+        this.highlightId = undefined;
     }
 
     async updateData() {
@@ -61,6 +73,7 @@ export class PersonalDataComponent implements OnInit {
             this.currentPage,
             this.pageSize,
             this.filters,
+            this.sort,
         );
 
         this.personalData = data.personalData;
@@ -73,7 +86,7 @@ export class PersonalDataComponent implements OnInit {
         if (event.page == this.currentPage) return;
 
         this.currentPage = event.page;
-        this.loading = true
+        this.loading = true;
         this.updateData();
         this.highlightId = undefined;
     }
@@ -87,6 +100,6 @@ export class PersonalDataComponent implements OnInit {
             this.highlightId = highlightId;
         }
 
-        this.updateData()
+        this.updateData();
     }
 }
