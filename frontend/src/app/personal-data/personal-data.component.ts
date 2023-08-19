@@ -21,7 +21,7 @@ export class PersonalDataComponent implements OnInit {
     pageSize: number = 10;
     totalItems: number = 100;
     loading: boolean = true;
-    highlightIndex?: number;
+    highlightId?: string;
 
     personalData!: PersonalData[];
     personalDataService: PersonalDataService = inject(PersonalDataService);
@@ -65,16 +65,16 @@ export class PersonalDataComponent implements OnInit {
         this.currentPage = event.page;
         this.loading = true
         this.updateData();
-        this.highlightIndex = undefined;
+        this.highlightId = undefined;
     }
 
     ngOnInit(): void {
-        const highlight = this.route.snapshot.fragment;
-        const highlightId = parseInt(highlight ?? "");
+        const highlightId = this.route.snapshot.fragment;
 
-        if (!isNaN(highlightId)) {
-            this.currentPage = highlightId / this.pageSize + 1;
-            this.highlightIndex = highlightId % this.pageSize;
+        if (highlightId) {
+            // TODO: Find a way to go to the correct page
+            // this.currentPage = highlightId / this.pageSize + 1;
+            this.highlightId = highlightId;
         }
 
         this.updateData()

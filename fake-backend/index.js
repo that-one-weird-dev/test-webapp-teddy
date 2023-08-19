@@ -9,7 +9,7 @@ function createPersonalData(id) {
     })
 
     return {
-        id: id.toString(),
+        id: faker.string.alphanumeric(8),
         email,
         firstname: firstName,
         surname: lastName,
