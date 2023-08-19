@@ -5,12 +5,18 @@ import { PersonalDataService } from "../personal-data.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import Swal from "sweetalert2";
 
+enum PageFunctionality {
+    Create,
+    Edit,
+}
+
 @Component({
     selector: "personal-data-edit",
     templateUrl: "./personal-data-edit.component.html",
 })
 export class PersonalDataEditComponent implements OnInit {
     loading: boolean = false;
+    pageFunctionality: PageFunctionality = PageFunctionality.Edit;
     personalData?: PersonalData;
     personalDataService: PersonalDataService = inject(PersonalDataService);
 
@@ -22,7 +28,33 @@ export class PersonalDataEditComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private router: Router) {}
 
-    async submitEdit() {
+    submitForm() {
+        const data: PersonalData = {
+            id: this.personalData?.id ?? 0,
+            firstname: this.editForm.value.firstname ?? "",
+            surname: this.editForm.value.surname ?? "",
+            email: this.editForm.value.email ?? "",
+        };
+
+        switch (this.pageFunctionality) {
+            case PageFunctionality.Create:
+                this.submitCreate(data);
+                break;
+            case PageFunctionality.Edit:
+                this.submitEdit(data);
+                break;
+        }
+    }
+
+    async submitCreate(data: PersonalData) {
+        await this.personalDataService.createPersonalData(data);
+
+        this.router.navigate(["/"], {
+            fragment: this.personalData?.id.toString(),
+        });
+    }
+
+    async submitEdit(data: PersonalData) {
         const result = await Swal.fire({
             title: "Confirm edit?",
             showCancelButton: true,
@@ -30,14 +62,7 @@ export class PersonalDataEditComponent implements OnInit {
 
         if (!result.isConfirmed) return;
 
-        const newData: PersonalData = {
-            id: this.personalData!.id,
-            firstname: this.editForm.value.firstname ?? "",
-            surname: this.editForm.value.surname ?? "",
-            email: this.editForm.value.email ?? "",
-        };
-
-        await this.personalDataService.editPersonalData(newData);
+        await this.personalDataService.editPersonalData(data);
         this.router.navigate(["/"], {
             fragment: this.personalData?.id.toString(),
         });
@@ -50,17 +75,11 @@ export class PersonalDataEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const idString = this.route.snapshot.paramMap.get("id");
+        const id = this.route.snapshot.paramMap.get("id");
 
-        if (idString == null) {
+        if (!id) {
             // This means we are in the /add path because we have no id paramter
-            return;
-        }
-
-        const id = parseInt(idString || "");
-        if (isNaN(id)) {
-            // This means we an invalid id parameter so we return to the homepage
-            this.router.navigate(["/"], { fragment: id.toString() });
+            this.pageFunctionality = PageFunctionality.Create;
             return;
         }
 

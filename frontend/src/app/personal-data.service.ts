@@ -17,9 +17,11 @@ export class PersonalDataService {
 
     async getPaginatedPersonalData(
         page: number,
-        limit: number,
+        limit: number
     ): Promise<PaginatedPersonalData> {
-        const data = await fetch(`${this.personalDataUrl}?_page=${page}&_limit=${limit}`);
+        const data = await fetch(
+            `${this.personalDataUrl}?_page=${page}&_limit=${limit}`
+        );
 
         return {
             personalData: (await data.json()) ?? [],
@@ -27,9 +29,19 @@ export class PersonalDataService {
         };
     }
 
-    async getPersonalDataById(id: number): Promise<PersonalData> {
+    async getPersonalDataById(id: string): Promise<PersonalData> {
         const data = await fetch(`${this.personalDataUrl}/${id}`);
         return (await data.json()) ?? {};
+    }
+
+    async createPersonalData(data: PersonalData) {
+        await fetch(`${this.personalDataUrl}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
     }
 
     async editPersonalData(data: PersonalData) {
@@ -39,12 +51,12 @@ export class PersonalDataService {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
-        })
+        });
     }
 
     async deletePersonalData(id: number) {
         await fetch(`${this.personalDataUrl}/${id}`, {
             method: "DELETE",
-        })
+        });
     }
 }
