@@ -13,6 +13,11 @@ function createPersonalData(id) {
         email,
         firstname: firstName,
         surname: lastName,
+        address: faker.location.streetAddress(),
+        place: faker.location.city(),
+        city: faker.location.city(),
+        province: faker.location.county(),
+        note: faker.person.bio(),
     };
 }
 

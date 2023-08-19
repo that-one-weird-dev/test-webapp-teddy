@@ -20,20 +20,41 @@ export class PersonalDataEditComponent implements OnInit {
     personalData?: PersonalData;
     personalDataService: PersonalDataService = inject(PersonalDataService);
 
+    properties: (keyof PersonalData)[] = [
+        "firstname",
+        "surname",
+        "email",
+        "address",
+        "place",
+        "city",
+        "province",
+        "note",
+    ];
+
     editForm = new FormGroup({
         firstname: new FormControl(""),
         surname: new FormControl(""),
         email: new FormControl(""),
+        address: new FormControl<string | undefined>(""),
+        place: new FormControl<string | undefined>(""),
+        city: new FormControl<string | undefined>(""),
+        province: new FormControl<string | undefined>(""),
+        note: new FormControl<string | undefined>(""),
     });
 
     constructor(private route: ActivatedRoute, private router: Router) {}
 
     submitForm() {
         const data: PersonalData = {
-            id: this.personalData?.id ?? '',
+            id: this.personalData?.id ?? "",
             firstname: this.editForm.value.firstname ?? "",
             surname: this.editForm.value.surname ?? "",
             email: this.editForm.value.email ?? "",
+            address: this.editForm.value.address ?? undefined,
+            place: this.editForm.value.place ?? undefined,
+            city: this.editForm.value.city ?? undefined,
+            province: this.editForm.value.province ?? undefined,
+            note: this.editForm.value.note ?? undefined,
         };
 
         switch (this.pageFunctionality) {
@@ -90,6 +111,11 @@ export class PersonalDataEditComponent implements OnInit {
                 firstname: new FormControl(this.personalData.firstname),
                 surname: new FormControl(this.personalData.surname),
                 email: new FormControl(this.personalData.email),
+                address: new FormControl(this.personalData.address),
+                place: new FormControl(this.personalData.place),
+                city: new FormControl(this.personalData.city),
+                province: new FormControl(this.personalData.province),
+                note: new FormControl(this.personalData.note),
             });
             this.loading = false;
         });

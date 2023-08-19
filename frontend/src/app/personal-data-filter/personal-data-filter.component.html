@@ -1,4 +1,4 @@
-<div class="d-flex flex-row justify-content-between" style="gap: 1rem;">
+<div class="d-flex flex-row justify-content-between" style="gap: 1rem">
     <form [formGroup]="propertyForm" (submit)="submitFilter($event)">
         <div class="input-group">
             <span class="input-group-text">Filter</span>
@@ -21,37 +21,15 @@
                     role="menu"
                     aria-labelledby="button-basic"
                 >
-                    <li role="menuitem">
+                    <li role="menuitem" *ngFor="let prop of properties">
                         <button
                             class="dropdown-item"
                             type="button"
                             (click)="
-                                propertyForm.controls.type.setValue('firstname')
+                                propertyForm.controls.type.setValue(prop)
                             "
                         >
-                            First name
-                        </button>
-                    </li>
-                    <li role="menuitem">
-                        <button
-                            class="dropdown-item"
-                            type="button"
-                            (click)="
-                                propertyForm.controls.type.setValue('surname')
-                            "
-                        >
-                            Surname
-                        </button>
-                    </li>
-                    <li role="menuitem">
-                        <button
-                            class="dropdown-item"
-                            type="button"
-                            (click)="
-                                propertyForm.controls.type.setValue('email')
-                            "
-                        >
-                            Email
+                            {{ prop }}
                         </button>
                     </li>
                 </ul>
@@ -81,31 +59,13 @@
                 role="menu"
                 aria-labelledby="button-sort"
             >
-                <li role="menuitem">
+                <li role="menuitem" *ngFor="let prop of properties">
                     <button
                         class="dropdown-item"
                         type="button"
-                        (click)="updateSort({ key: 'firstname' })"
+                        (click)="updateSort({ key: prop })"
                     >
-                        First name
-                    </button>
-                </li>
-                <li role="menuitem">
-                    <button
-                        class="dropdown-item"
-                        type="button"
-                        (click)="updateSort({ key: 'surname' })"
-                    >
-                        Surname
-                    </button>
-                </li>
-                <li role="menuitem">
-                    <button
-                        class="dropdown-item"
-                        type="button"
-                        (click)="updateSort({ key: 'email' })"
-                    >
-                        Email
+                        {{ prop }}
                     </button>
                 </li>
             </ul>

@@ -18,6 +18,17 @@ export class PersonalDataFilterComponent {
         order: "ascending",
     };
 
+    properties: (keyof PersonalData)[] = [
+        "firstname",
+        "surname",
+        "email",
+        "address",
+        "place",
+        "city",
+        "province",
+        "note",
+    ];
+
     propertyForm = new FormGroup({
         type: new FormControl<keyof PersonalData>("firstname"),
         value: new FormControl(""),
