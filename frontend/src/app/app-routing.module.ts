@@ -6,7 +6,7 @@ import { PersonalDataEditComponent } from "./personal-data-edit/personal-data-ed
 const routes: Routes = [
     { path: "", component: PersonalDataComponent },
     { path: "edit/:id", component: PersonalDataEditComponent },
-    { path: "add", component: PersonalDataEditComponent },
+    { path: "new", component: PersonalDataEditComponent },
 ];
 
 @NgModule({

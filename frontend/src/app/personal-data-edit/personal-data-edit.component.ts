@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
     templateUrl: "./personal-data-edit.component.html",
 })
 export class PersonalDataEditComponent implements OnInit {
-    loading: boolean = true;
+    loading: boolean = false;
     personalData?: PersonalData;
     personalDataService: PersonalDataService = inject(PersonalDataService);
 
@@ -64,6 +64,7 @@ export class PersonalDataEditComponent implements OnInit {
             return;
         }
 
+        this.loading = true;
         this.personalDataService.getPersonalDataById(id).then((data) => {
             this.personalData = data;
             this.editForm = new FormGroup({
