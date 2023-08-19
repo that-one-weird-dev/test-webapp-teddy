@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 import { PersonalData } from "../personal-data";
 import { FormControl, FormGroup } from "@angular/forms";
-import { PersonalDataPropertyFilter } from "../personal-data-filter";
+import { PersonalDataFilter } from "../personal-data-filter";
 
 @Component({
     selector: "personal-data-filter",
@@ -10,7 +10,7 @@ import { PersonalDataPropertyFilter } from "../personal-data-filter";
 export class PersonalDataFilterComponent {
     @Output() filtersChanged = new EventEmitter<typeof this.filters>();
 
-    filters: PersonalDataPropertyFilter[] = [];
+    filters: PersonalDataFilter[] = [];
 
     propertyForm = new FormGroup({
         type: new FormControl<keyof PersonalData>("firstname"),

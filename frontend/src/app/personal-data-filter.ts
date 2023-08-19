@@ -1,9 +1,6 @@
 import { PersonalData } from "./personal-data";
 
-export interface PersonalDataFilter extends PersonalDataPropertyFilter {
-}
-
-export interface PersonalDataPropertyFilter {
+export interface PersonalDataFilter {
     type: keyof PersonalData;
     value: string;
 }
