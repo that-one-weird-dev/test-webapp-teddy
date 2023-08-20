@@ -151,6 +151,8 @@ export class PersonalDataComponent implements OnInit {
                     key: sortKey,
                     order: sortOrder,
                 };
+            } else {
+                this.sort = { key: "firstname", order: "ascending" };
             }
 
             const pageString = params.get("page") ?? "";
@@ -164,7 +166,7 @@ export class PersonalDataComponent implements OnInit {
         });
 
         this.route.fragment.subscribe((fragment) => {
-            this.highlightId = fragment ?? '';
+            this.highlightId = fragment ?? "";
         });
     }
 }
