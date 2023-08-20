@@ -65,13 +65,12 @@ export class PersonalDataEditComponent implements OnInit {
     }
 
     async submitCreate(data: PersonalData) {
-        await this.personalDataService.createPersonalData(data);
+        const id = await this.personalDataService.createPersonalData(data);
 
         this.router.navigate(["/"], {
-            // TODO: Make this use the id return from createPersonalData when possible in the future
-            // queryParams: {
-            //     "filter": `id:${id ?? ''}`
-            // },
+            queryParams: {
+                "filter": `id:${id}`
+            },
         });
     }
 

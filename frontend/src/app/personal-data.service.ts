@@ -46,7 +46,8 @@ export class PersonalDataService {
         return (await data.json()) ?? {};
     }
 
-    async createPersonalData(data: PersonalData) {
+    async createPersonalData(data: PersonalData): Promise<string> {
+        data.id = this.generateRandomId();
         await fetch(`${this.personalDataUrl}`, {
             method: "POST",
             headers: {
@@ -54,6 +55,8 @@ export class PersonalDataService {
             },
             body: JSON.stringify(data),
         });
+
+        return data.id;
     }
 
     async editPersonalData(data: PersonalData) {
@@ -70,5 +73,9 @@ export class PersonalDataService {
         await fetch(`${this.personalDataUrl}/${id}`, {
             method: "DELETE",
         });
+    }
+
+    private generateRandomId(): string {
+        return Math.random().toString(36).slice(2);
     }
 }

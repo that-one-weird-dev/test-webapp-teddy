@@ -56,8 +56,7 @@ export class PersonalDataComponent implements OnInit {
         this.filters = filters;
         this.currentPage = 1;
         this.loading = true;
-        this.updateData();
-        this.highlightId = undefined;
+        this.updateData().then(() => this.router.navigate(["/"]));
     }
 
     updateSort(sort: PersonalDataSort) {
@@ -65,7 +64,6 @@ export class PersonalDataComponent implements OnInit {
         this.currentPage = 1;
         this.loading = true;
         this.updateData();
-        this.highlightId = undefined;
     }
 
     async updateData() {
@@ -80,6 +78,7 @@ export class PersonalDataComponent implements OnInit {
         this.totalItems = data.totalCount;
         this.loading = false;
         this.currentPaginationPage = this.currentPage;
+        this.highlightId = undefined;
     }
 
     pageChanged(event: PageChangedEvent) {
@@ -88,7 +87,6 @@ export class PersonalDataComponent implements OnInit {
         this.currentPage = event.page;
         this.loading = true;
         this.updateData();
-        this.highlightId = undefined;
     }
 
     ngOnInit(): void {
@@ -103,8 +101,10 @@ export class PersonalDataComponent implements OnInit {
             }
         }
 
-        this.highlightId = this.route.snapshot.fragment ?? undefined;
+        const highlightId = this.route.snapshot.fragment ?? undefined;
 
-        this.updateData();
+        this.updateData().then(() => {
+            this.highlightId = highlightId;
+        });
     }
 }
