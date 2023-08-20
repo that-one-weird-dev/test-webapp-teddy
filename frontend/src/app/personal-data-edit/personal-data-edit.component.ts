@@ -64,6 +64,7 @@ export class PersonalDataEditComponent implements OnInit {
         const id = await this.personalDataService.createPersonalData(data);
 
         this.router.navigate(["/"], {
+            fragment: id,
             queryParams: {
                 filter: `id:${id}`,
             },
