@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { PersonalData } from "../personal-data";
+import { PersonalData, personalDataKeysToDisplayMap } from "../personal-data";
 import { PersonalDataService } from "../personal-data.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import Swal from "sweetalert2";
@@ -20,16 +20,9 @@ export class PersonalDataEditComponent implements OnInit {
     personalData?: PersonalData;
     personalDataService: PersonalDataService = inject(PersonalDataService);
 
-    properties: (keyof PersonalData)[] = [
-        "firstname",
-        "surname",
-        "email",
-        "address",
-        "place",
-        "city",
-        "province",
-        "note",
-    ];
+    fields = Object.keys(personalDataKeysToDisplayMap).filter(
+        (field) => field != "id"
+    ) as (keyof PersonalData)[];
 
     editForm = new FormGroup({
         firstname: new FormControl(""),
@@ -43,6 +36,10 @@ export class PersonalDataEditComponent implements OnInit {
     });
 
     constructor(private route: ActivatedRoute, private router: Router) {}
+
+    displayField(field: keyof PersonalData): string {
+        return personalDataKeysToDisplayMap[field];
+    }
 
     submitForm() {
         const data: PersonalData = {

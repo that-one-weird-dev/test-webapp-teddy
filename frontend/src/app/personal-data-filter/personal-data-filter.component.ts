@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
-import { PersonalData } from "../personal-data";
+import { PersonalData, personalDataKeysToDisplayMap } from "../personal-data";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PersonalDataFilter } from "../personal-data-filter";
 import { PersonalDataSort } from "../personal-data-sort";
@@ -18,21 +18,18 @@ export class PersonalDataFilterComponent {
         order: "ascending",
     };
 
-    properties: (keyof PersonalData)[] = [
-        "firstname",
-        "surname",
-        "email",
-        "address",
-        "place",
-        "city",
-        "province",
-        "note",
-    ];
+    fields = Object.keys(
+        personalDataKeysToDisplayMap
+    ) as (keyof PersonalData)[];
 
     propertyForm = new FormGroup({
         type: new FormControl<keyof PersonalData>("firstname"),
         value: new FormControl(""),
     });
+
+    displayField(field: keyof PersonalData): string {
+        return personalDataKeysToDisplayMap[field];
+    }
 
     updateSort(sortOverlay: Partial<PersonalDataSort>) {
         this.sort = {

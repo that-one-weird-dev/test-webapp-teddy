@@ -11,7 +11,7 @@
                     dropdownToggle
                     aria-controls="dropdown-basic"
                 >
-                    {{ propertyForm.value.type }}
+                    {{ displayField(propertyForm.value.type ?? 'firstname') }}
                     <span class="caret"></span>
                 </button>
                 <ul
@@ -21,15 +21,15 @@
                     role="menu"
                     aria-labelledby="button-basic"
                 >
-                    <li role="menuitem" *ngFor="let prop of properties">
+                    <li role="menuitem" *ngFor="let field of fields">
                         <button
                             class="dropdown-item"
                             type="button"
                             (click)="
-                                propertyForm.controls.type.setValue(prop)
+                                propertyForm.controls.type.setValue(field)
                             "
                         >
-                            {{ prop }}
+                            {{ displayField(field) }}
                         </button>
                     </li>
                 </ul>
@@ -49,7 +49,7 @@
                 dropdownToggle
                 aria-controls="dropdown-sort"
             >
-                {{ sort.key }}
+                {{ displayField(sort.key) }}
                 <span class="caret"></span>
             </button>
             <ul
@@ -59,13 +59,13 @@
                 role="menu"
                 aria-labelledby="button-sort"
             >
-                <li role="menuitem" *ngFor="let prop of properties">
+                <li role="menuitem" *ngFor="let field of fields">
                     <button
                         class="dropdown-item"
                         type="button"
-                        (click)="updateSort({ key: prop })"
+                        (click)="updateSort({ key: field })"
                     >
-                        {{ prop }}
+                        {{ displayField(field) }}
                     </button>
                 </li>
             </ul>
@@ -125,7 +125,7 @@
             *ngFor="let filter of filters"
             (click)="removeFilter(filter)"
         >
-            {{ filter.type }}
+            {{ displayField(filter.type) }}
             <div class="vr"></div>
             <strong>{{ filter.value }}</strong>
         </div>
