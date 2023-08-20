@@ -9,6 +9,6 @@ export class NavbarComponent {
     constructor(private router: Router) {}
 
     isAddDataVisible(): boolean {
-        return this.router.url.split("#")[0] == "/";
+        return this.router.url.split("#")[0].split("?")[0] == "/";
     }
 }

@@ -22,3 +22,7 @@ export const personalDataKeysToDisplayMap: { [P in keyof PersonalData]-?: string
     "province": "Province",
     "note": "Note",
 };
+
+export function isPersonalDataKey(key: string): key is keyof PersonalData {
+    return !!Object.keys(personalDataKeysToDisplayMap).find(k => k == key);
+}

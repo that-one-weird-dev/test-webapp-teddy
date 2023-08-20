@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { PersonalData, personalDataKeysToDisplayMap } from "../personal-data";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PersonalDataFilter } from "../personal-data-filter";
@@ -12,8 +12,8 @@ export class PersonalDataFilterComponent {
     @Output() filtersChanged = new EventEmitter<typeof this.filters>();
     @Output() sortChanged = new EventEmitter<typeof this.sort>();
 
-    filters: PersonalDataFilter[] = [];
-    sort: PersonalDataSort = {
+    @Input() filters: PersonalDataFilter[] = [];
+    @Input() sort: PersonalDataSort = {
         key: "firstname",
         order: "ascending",
     };

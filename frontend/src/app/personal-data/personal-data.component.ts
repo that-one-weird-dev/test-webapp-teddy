@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
-import { PersonalData } from "../personal-data";
+import { PersonalData, isPersonalDataKey } from "../personal-data";
 import { PersonalDataService } from "../personal-data.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
@@ -73,7 +73,7 @@ export class PersonalDataComponent implements OnInit {
             this.currentPage,
             this.pageSize,
             this.filters,
-            this.sort,
+            this.sort
         );
 
         this.personalData = data.personalData;
@@ -83,7 +83,7 @@ export class PersonalDataComponent implements OnInit {
     }
 
     pageChanged(event: PageChangedEvent) {
-        if (event.page == this.currentPage) return;
+        if (event.page === this.currentPage) return;
 
         this.currentPage = event.page;
         this.loading = true;
@@ -92,13 +92,18 @@ export class PersonalDataComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const highlightId = this.route.snapshot.fragment;
-
-        if (highlightId) {
-            // TODO: Find a way to go to the correct page
-            // this.currentPage = highlightId / this.pageSize + 1;
-            this.highlightId = highlightId;
+        const filter = this.route.snapshot.queryParamMap.get("filter");
+        if (filter) {
+            const [key, value] = filter.split(":");
+            if (key && value && isPersonalDataKey(key)) {
+                this.filters.push({
+                    type: key,
+                    value,
+                });
+            }
         }
+
+        this.highlightId = this.route.snapshot.fragment ?? undefined;
 
         this.updateData();
     }

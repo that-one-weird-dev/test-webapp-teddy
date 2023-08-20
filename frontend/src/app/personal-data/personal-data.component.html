@@ -2,6 +2,7 @@
     <div class="d-flex flex-column w-100" style="max-width: 55rem">
         <div class="pb-4">
             <personal-data-filter
+                [filters]="filters"
                 (filtersChanged)="updateFilters($event)"
                 (sortChanged)="updateSort($event)"
             ></personal-data-filter>

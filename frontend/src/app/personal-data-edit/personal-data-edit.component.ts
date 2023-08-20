@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 import { PersonalData, personalDataKeysToDisplayMap } from "../personal-data";
 import { PersonalDataService } from "../personal-data.service";
 import { FormControl, FormGroup } from "@angular/forms";
@@ -68,7 +68,10 @@ export class PersonalDataEditComponent implements OnInit {
         await this.personalDataService.createPersonalData(data);
 
         this.router.navigate(["/"], {
-            fragment: this.personalData?.id.toString(),
+            // TODO: Make this use the id return from createPersonalData when possible in the future
+            // queryParams: {
+            //     "filter": `id:${id ?? ''}`
+            // },
         });
     }
 
@@ -82,14 +85,15 @@ export class PersonalDataEditComponent implements OnInit {
 
         await this.personalDataService.editPersonalData(data);
         this.router.navigate(["/"], {
-            fragment: this.personalData?.id.toString(),
+            fragment: this.personalData?.id,
+            queryParams: {
+                filter: `id:${this.personalData?.id ?? ""}`,
+            },
         });
     }
 
     cancel() {
-        this.router.navigate(["/"], {
-            fragment: this.personalData?.id.toString(),
-        });
+        this.router.navigate(["/"]);
     }
 
     ngOnInit(): void {
