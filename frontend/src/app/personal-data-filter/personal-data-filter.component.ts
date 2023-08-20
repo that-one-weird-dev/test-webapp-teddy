@@ -9,8 +9,9 @@ import { PersonalDataSort } from "../personal-data-sort";
     templateUrl: "./personal-data-filter.component.html",
 })
 export class PersonalDataFilterComponent {
-    @Output() filtersChanged = new EventEmitter<typeof this.filters>();
-    @Output() sortChanged = new EventEmitter<typeof this.sort>();
+    @Output() filtersAdded = new EventEmitter<PersonalDataFilter[]>();
+    @Output() filterRemoved = new EventEmitter<PersonalDataFilter>();
+    @Output() sortChanged = new EventEmitter<PersonalDataSort>();
 
     @Input() filters: PersonalDataFilter[] = [];
     @Input() sort: PersonalDataSort = {
@@ -40,22 +41,19 @@ export class PersonalDataFilterComponent {
     }
 
     removeFilter(filter: PersonalDataFilter) {
-        this.filters = this.filters.filter((f) => f != filter);
-        this.filtersChanged.emit(this.filters);
+        this.filterRemoved.emit(filter);
     }
 
     submitFilter(event: SubmitEvent) {
-        this.propertyForm.value.value
+        const filters = this.propertyForm.value.value
             ?.split(" ")
             .filter((tag) => tag.length > 0)
-            .forEach((tag) => {
-                this.filters.push({
-                    type: this.propertyForm.value.type ?? "firstname",
-                    value: tag,
-                });
-            });
+            .map((tag) => ({
+                type: this.propertyForm.value.type ?? "firstname",
+                value: tag,
+            }));
 
-        this.filtersChanged.emit(this.filters);
+        this.filtersAdded.emit(filters);
 
         this.propertyForm.setValue({
             type: "firstname",

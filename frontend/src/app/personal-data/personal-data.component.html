@@ -3,8 +3,10 @@
         <div class="pb-4">
             <personal-data-filter
                 [filters]="filters"
-                (filtersChanged)="updateFilters($event)"
-                (sortChanged)="updateSort($event)"
+                [sort]="sort"
+                (filtersAdded)="addFilters($event)"
+                (filterRemoved)="removeFilter($event)"
+                (sortChanged)="changeSort($event)"
             ></personal-data-filter>
         </div>
 
@@ -16,7 +18,7 @@
                 [ngModel]="currentPaginationPage"
                 [maxSize]="9"
                 [rotate]="false"
-                (pageChanged)="pageChanged($event)"
+                (pageChanged)="changePage($event)"
             ></pagination>
         </div>
 

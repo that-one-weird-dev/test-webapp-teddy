@@ -5,7 +5,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import Swal from "sweetalert2";
 import { PersonalDataFilter } from "../personal-data-filter";
-import { PersonalDataSort } from "../personal-data-sort";
+import {
+    PersonalDataSort,
+    isPersonalDataSortOrder,
+} from "../personal-data-sort";
 
 @Component({
     selector: "personal-data",
@@ -52,18 +55,51 @@ export class PersonalDataComponent implements OnInit {
         await this.updateData();
     }
 
-    updateFilters(filters: PersonalDataFilter[]) {
-        this.filters = filters;
-        this.currentPage = 1;
-        this.loading = true;
-        this.updateData().then(() => this.router.navigate(["/"]));
+    addFilters(filters: PersonalDataFilter[]) {
+        this.reroute(
+            this.currentPage,
+            [...this.filters, ...filters],
+            this.sort
+        );
     }
 
-    updateSort(sort: PersonalDataSort) {
-        this.sort = sort;
-        this.currentPage = 1;
-        this.loading = true;
-        this.updateData();
+    removeFilter(filter: PersonalDataFilter) {
+        this.reroute(
+            this.currentPage,
+            this.filters.filter((f) => f != filter),
+            this.sort
+        );
+    }
+
+    changeSort(sort: PersonalDataSort) {
+        this.reroute(this.currentPage, this.filters, sort);
+    }
+
+    changePage(event: PageChangedEvent) {
+        if (event.page === this.currentPage) return;
+
+        this.reroute(event.page, this.filters, this.sort);
+    }
+
+    reroute(
+        page: number,
+        filters: PersonalDataFilter[],
+        sort: PersonalDataSort
+    ) {
+        const filtersString = filters.reduce((str, filter) => {
+            return `${str}${filter.type}:${filter.value},`;
+        }, "");
+        const sortString = this.isDefaultSort(sort)
+            ? ""
+            : `${sort.key}:${sort.order}`;
+
+        this.router.navigate(["/"], {
+            queryParams: {
+                page: page.toString(),
+                filters: filtersString || undefined,
+                sort: sortString || undefined,
+            },
+        });
     }
 
     async updateData() {
@@ -78,33 +114,57 @@ export class PersonalDataComponent implements OnInit {
         this.totalItems = data.totalCount;
         this.loading = false;
         this.currentPaginationPage = this.currentPage;
-        this.highlightId = undefined;
     }
 
-    pageChanged(event: PageChangedEvent) {
-        if (event.page === this.currentPage) return;
-
-        this.currentPage = event.page;
-        this.loading = true;
-        this.updateData();
+    isDefaultSort(sort: PersonalDataSort): boolean {
+        return sort.key === "firstname" && sort.order === "ascending";
     }
 
     ngOnInit(): void {
-        const filter = this.route.snapshot.queryParamMap.get("filter");
-        if (filter) {
-            const [key, value] = filter.split(":");
-            if (key && value && isPersonalDataKey(key)) {
-                this.filters.push({
-                    type: key,
-                    value,
-                });
+        this.route.queryParamMap.subscribe((params) => {
+            const filtersString = params.get("filters");
+            this.filters =
+                filtersString?.split(",").flatMap((filterString) => {
+                    const [key, value] = filterString.split(":");
+
+                    if (key && value && isPersonalDataKey(key)) {
+                        return [
+                            {
+                                type: key,
+                                value,
+                            },
+                        ];
+                    }
+
+                    return [];
+                }) ?? [];
+
+            const sortString = params.get("sort");
+            const [sortKey, sortOrder] = sortString?.split(":") ?? [];
+            if (
+                sortKey &&
+                sortOrder &&
+                isPersonalDataKey(sortKey) &&
+                isPersonalDataSortOrder(sortOrder)
+            ) {
+                this.sort = {
+                    key: sortKey,
+                    order: sortOrder,
+                };
             }
-        }
 
-        const highlightId = this.route.snapshot.fragment ?? undefined;
+            const pageString = params.get("page") ?? "";
+            const page = parseInt(pageString);
+            if (!isNaN(page)) {
+                this.currentPage = page;
+            }
 
-        this.updateData().then(() => {
-            this.highlightId = highlightId;
+            this.loading = true;
+            this.updateData();
+        });
+
+        this.route.fragment.subscribe((fragment) => {
+            this.highlightId = fragment ?? '';
         });
     }
 }

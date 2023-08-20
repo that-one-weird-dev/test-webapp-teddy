@@ -66,7 +66,7 @@ export class PersonalDataEditComponent implements OnInit {
         this.router.navigate(["/"], {
             fragment: id,
             queryParams: {
-                filter: `id:${id}`,
+                filters: `id:${id}`,
             },
         });
     }
@@ -83,7 +83,7 @@ export class PersonalDataEditComponent implements OnInit {
         this.router.navigate(["/"], {
             fragment: this.personalData?.id,
             queryParams: {
-                filter: `id:${this.personalData?.id ?? ""}`,
+                filters: `id:${this.personalData?.id ?? ""}`,
             },
         });
     }
@@ -109,29 +109,31 @@ export class PersonalDataEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const id = this.route.snapshot.paramMap.get("id");
+        this.route.paramMap.subscribe((params) => {
+            const id = params.get('id');
 
-        if (!id) {
-            // This means we are in the /add path because we have no id paramter
-            this.pageFunctionality = PageFunctionality.Create;
-            return;
-        }
+            if (!id) {
+                // This means we are in the /add path because we have no id paramter
+                this.pageFunctionality = PageFunctionality.Create;
+                return;
+            }
 
-        this.loading = true;
-        this.personalDataService.getPersonalDataById(id).then((data) => {
-            this.personalData = data;
+            this.loading = true;
+            this.personalDataService.getPersonalDataById(id).then((data) => {
+                this.personalData = data;
 
-            this.editForm.setValue({
-                firstname: this.personalData.firstname,
-                surname: this.personalData.surname,
-                email: this.personalData.email,
-                address: this.personalData.address,
-                place: this.personalData.place,
-                city: this.personalData.city,
-                province: this.personalData.province,
-                note: this.personalData.note,
+                this.editForm.setValue({
+                    firstname: this.personalData.firstname,
+                    surname: this.personalData.surname,
+                    email: this.personalData.email,
+                    address: this.personalData.address,
+                    place: this.personalData.place,
+                    city: this.personalData.city,
+                    province: this.personalData.province,
+                    note: this.personalData.note,
+                });
+                this.loading = false;
             });
-            this.loading = false;
         });
     }
 }
