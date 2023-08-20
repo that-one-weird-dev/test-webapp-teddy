@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { PersonalData, personalDataKeysToDisplayMap } from "../personal-data";
 import { PersonalDataService } from "../personal-data.service";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 
 enum PageFunctionality {
@@ -19,15 +19,12 @@ export class PersonalDataEditComponent implements OnInit {
     pageFunctionality: PageFunctionality = PageFunctionality.Edit;
     personalData?: PersonalData;
     personalDataService: PersonalDataService = inject(PersonalDataService);
-
-    fields = Object.keys(personalDataKeysToDisplayMap).filter(
-        (field) => field != "id"
-    ) as (keyof PersonalData)[];
+    confirmedAtLeastOnce: boolean = false;
 
     editForm = new FormGroup({
-        firstname: new FormControl(""),
-        surname: new FormControl(""),
-        email: new FormControl(""),
+        firstname: new FormControl("", Validators.required),
+        surname: new FormControl("", Validators.required),
+        email: new FormControl("", [Validators.required, Validators.email]),
         address: new FormControl<string | undefined>(""),
         place: new FormControl<string | undefined>(""),
         city: new FormControl<string | undefined>(""),
@@ -37,11 +34,10 @@ export class PersonalDataEditComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private router: Router) {}
 
-    displayField(field: keyof PersonalData): string {
-        return personalDataKeysToDisplayMap[field];
-    }
-
     submitForm() {
+        this.confirmedAtLeastOnce = true;
+        if (!this.editForm.valid) return;
+
         const data: PersonalData = {
             id: this.personalData?.id ?? "",
             firstname: this.editForm.value.firstname ?? "",
@@ -69,7 +65,7 @@ export class PersonalDataEditComponent implements OnInit {
 
         this.router.navigate(["/"], {
             queryParams: {
-                "filter": `id:${id}`
+                filter: `id:${id}`,
             },
         });
     }
@@ -95,6 +91,22 @@ export class PersonalDataEditComponent implements OnInit {
         this.router.navigate(["/"]);
     }
 
+    checkInvalid(field: string): boolean {
+        return (
+            !!this.editForm.get(field)?.errors &&
+            !this.loading &&
+            this.confirmedAtLeastOnce
+        );
+    }
+
+    checkInvalidValidator(field: string, validator: string): boolean {
+        return (
+            !!this.editForm.get(field)?.errors?.[validator] &&
+            !this.loading &&
+            this.confirmedAtLeastOnce
+        );
+    }
+
     ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get("id");
 
@@ -107,15 +119,16 @@ export class PersonalDataEditComponent implements OnInit {
         this.loading = true;
         this.personalDataService.getPersonalDataById(id).then((data) => {
             this.personalData = data;
-            this.editForm = new FormGroup({
-                firstname: new FormControl(this.personalData.firstname),
-                surname: new FormControl(this.personalData.surname),
-                email: new FormControl(this.personalData.email),
-                address: new FormControl(this.personalData.address),
-                place: new FormControl(this.personalData.place),
-                city: new FormControl(this.personalData.city),
-                province: new FormControl(this.personalData.province),
-                note: new FormControl(this.personalData.note),
+
+            this.editForm.setValue({
+                firstname: this.personalData.firstname,
+                surname: this.personalData.surname,
+                email: this.personalData.email,
+                address: this.personalData.address,
+                place: this.personalData.place,
+                city: this.personalData.city,
+                province: this.personalData.province,
+                note: this.personalData.note,
             });
             this.loading = false;
         });

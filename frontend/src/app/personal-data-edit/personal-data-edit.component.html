@@ -1,18 +1,106 @@
 <form [formGroup]="editForm" (submit)="submitForm()">
-    <div
-        class="form-floating mb-3 placeholder-glow"
-        *ngFor="let field of fields"
-    >
+    <div class="form-floating mb-3 placeholder-glow">
         <input
-            [id]="field"
-            [type]="field === 'email' ? 'email' : 'text'"
-            [formControlName]="field"
+            id="firstname"
+            type="text"
+            formControlName="firstname"
+            class="form-control"
+            placeholder
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+            [class.is-invalid]="checkInvalid('firstname')"
+        />
+        <label for="firstname">First name</label>
+        <div class="invalid-feedback">Please provide a first name</div>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="surname"
+            type="text"
+            formControlName="surname"
+            class="form-control"
+            placeholder
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+            [class.is-invalid]="checkInvalid('surname')"
+        />
+        <label for="surname">Surname</label>
+        <div class="invalid-feedback">Please provide a surname</div>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-control"
+            placeholder
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+            [class.is-invalid]="checkInvalid('email')"
+        />
+        <label for="email">Email</label>
+        <div class="invalid-feedback" *ngIf="checkInvalidValidator('email', 'required')">Please provide an email</div>
+        <div class="invalid-feedback" *ngIf="checkInvalidValidator('email', 'email')">Not a valid email address</div>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="address"
+            type="text"
+            formControlName="address"
             class="form-control"
             placeholder=""
             [readOnly]="loading"
             [class.placeholder]="loading"
         />
-        <label [for]="field">{{ displayField(field) }}</label>
+        <label for="address">Address</label>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="place"
+            type="text"
+            formControlName="place"
+            class="form-control"
+            placeholder=""
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+        />
+        <label for="place">Place</label>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="city"
+            type="text"
+            formControlName="city"
+            class="form-control"
+            placeholder=""
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+        />
+        <label for="city">City</label>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="province"
+            type="text"
+            formControlName="province"
+            class="form-control"
+            placeholder=""
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+        />
+        <label for="province">Province</label>
+    </div>
+    <div class="form-floating mb-3 placeholder-glow">
+        <input
+            id="note"
+            type="text"
+            formControlName="note"
+            class="form-control"
+            placeholder=""
+            [readOnly]="loading"
+            [class.placeholder]="loading"
+        />
+        <label for="note">Notes</label>
     </div>
     <div class="d-flex placeholder-glow" style="gap: 1rem">
         <button type="button" class="btn btn-danger w-50" (click)="cancel()">
