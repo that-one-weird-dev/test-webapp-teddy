@@ -11,7 +11,7 @@
                     dropdownToggle
                     aria-controls="dropdown-basic"
                 >
-                    {{ displayField(propertyForm.value.type ?? 'firstname') }}
+                    {{ displayField(propertyForm.value.type ?? "firstname") }}
                     <span class="caret"></span>
                 </button>
                 <ul
@@ -25,9 +25,7 @@
                         <button
                             class="dropdown-item"
                             type="button"
-                            (click)="
-                                propertyForm.controls.type.setValue(field)
-                            "
+                            (click)="propertyForm.controls.type.setValue(field)"
                         >
                             {{ displayField(field) }}
                         </button>
@@ -81,7 +79,7 @@
                 dropdownToggle
                 aria-controls="dropdown-order"
             >
-                {{ sort.order }}
+                {{ sort.order === "ascending" ? "Ascending" : "Descending" }}
                 <span class="caret"></span>
             </button>
             <ul
