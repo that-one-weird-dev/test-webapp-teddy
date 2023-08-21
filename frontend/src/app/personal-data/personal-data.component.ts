@@ -159,9 +159,7 @@ export class PersonalDataComponent implements OnInit {
 
             const pageString = params.get("page") ?? "";
             const page = parseInt(pageString);
-            if (!isNaN(page)) {
-                this.currentPage = page;
-            }
+            this.currentPage = isNaN(page) ? 1 : page;
 
             this.loading = true;
             this.updateData();
