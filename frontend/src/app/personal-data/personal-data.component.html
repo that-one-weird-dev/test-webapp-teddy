@@ -31,16 +31,32 @@
                 <span accordion-heading>
                     <div class="d-flex flex-column">
                         <h5>{{ data.firstname }} {{ data.surname }}</h5>
-                        <i class="text-muted">{{ data.email }}</i>
+                        <i class="text-muted"
+                            >{{ data.email }}
+                            <i *ngIf="data.city"> - {{ data.city }}</i>
+                        </i>
                     </div>
                 </span>
 
                 <div>
-                    <h5><strong>Address:</strong> {{ data.address }}</h5>
-                    <h5><strong>Place:</strong> {{ data.place }}</h5>
-                    <h5><strong>City:</strong> {{ data.city }}</h5>
-                    <h5><strong>Province:</strong> {{ data.province }}</h5>
-                    <h5><strong>Note:</strong> {{ data.note }}</h5>
+                    <h5><strong>First name:</strong> {{ data.firstname }}</h5>
+                    <h5><strong>Surname</strong> {{ data.surname }}</h5>
+                    <h5><strong>Email</strong> {{ data.email }}</h5>
+                    <h5 *ngIf="data.address">
+                        <strong>Address:</strong> {{ data.address }}
+                    </h5>
+                    <h5 *ngIf="data.place">
+                        <strong>Place:</strong> {{ data.place }}
+                    </h5>
+                    <h5 *ngIf="data.city">
+                        <strong>City:</strong> {{ data.city }}
+                    </h5>
+                    <h5 *ngIf="data.province">
+                        <strong>Province:</strong> {{ data.province }}
+                    </h5>
+                    <h5 *ngIf="data.note">
+                        <strong>Note:</strong> {{ data.note }}
+                    </h5>
                 </div>
 
                 <div class="d-flex flex-row-reverse">
