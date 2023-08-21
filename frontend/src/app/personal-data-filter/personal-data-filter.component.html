@@ -1,116 +1,139 @@
-<div class="d-flex flex-row justify-content-between" style="gap: 1rem">
-    <form [formGroup]="propertyForm" (submit)="submitFilter($event)">
-        <div class="input-group">
-            <span class="input-group-text">Filter</span>
+<div class="container m-0 p-0">
+    <div class="row justify-content-between" style="row-gap: 1rem;">
+        <div class="col-md-auto">
+            <form [formGroup]="propertyForm" (submit)="submitFilter($event)">
+                <div class="input-group">
+                    <span class="input-group-text">Filter</span>
 
-            <div dropdown>
-                <button
-                    id="button-basic"
-                    class="btn btn-outline-secondary dropdown-toggle"
-                    type="button"
-                    dropdownToggle
-                    aria-controls="dropdown-basic"
-                >
-                    {{ displayField(propertyForm.value.type ?? "firstname") }}
-                    <span class="caret"></span>
-                </button>
-                <ul
-                    id="dropdown-basic"
-                    class="dropdown-menu"
-                    *dropdownMenu
-                    role="menu"
-                    aria-labelledby="button-basic"
-                >
-                    <li role="menuitem" *ngFor="let field of fields">
+                    <div dropdown>
                         <button
-                            class="dropdown-item"
+                            id="button-basic"
+                            class="btn btn-outline-secondary dropdown-toggle"
                             type="button"
-                            (click)="propertyForm.controls.type.setValue(field)"
+                            dropdownToggle
+                            aria-controls="dropdown-basic"
                         >
-                            {{ displayField(field) }}
+                            {{
+                                displayField(
+                                    propertyForm.value.type ?? "firstname"
+                                )
+                            }}
+                            <span class="caret"></span>
                         </button>
-                    </li>
-                </ul>
+                        <ul
+                            id="dropdown-basic"
+                            class="dropdown-menu"
+                            *dropdownMenu
+                            role="menu"
+                            aria-labelledby="button-basic"
+                        >
+                            <li role="menuitem" *ngFor="let field of fields">
+                                <button
+                                    class="dropdown-item"
+                                    type="button"
+                                    (click)="
+                                        propertyForm.controls.type.setValue(
+                                            field
+                                        )
+                                    "
+                                >
+                                    {{ displayField(field) }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <input
+                        type="text"
+                        class="form-control"
+                        formControlName="value"
+                        style="min-width: 8rem; max-width: 12rem"
+                    />
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-auto">
+            <div class="input-group w-auto">
+                <span class="input-group-text">Sort by</span>
+
+                <div dropdown>
+                    <button
+                        id="button-sort"
+                        class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        dropdownToggle
+                        aria-controls="dropdown-sort"
+                    >
+                        {{ displayField(sort.key) }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul
+                        id="dropdown-sort"
+                        class="dropdown-menu"
+                        *dropdownMenu
+                        role="menu"
+                        aria-labelledby="button-sort"
+                    >
+                        <li role="menuitem" *ngFor="let field of fields">
+                            <button
+                                class="dropdown-item"
+                                type="button"
+                                (click)="updateSort({ key: field })"
+                            >
+                                {{ displayField(field) }}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <span class="input-group-text">In</span>
+
+                <div dropdown>
+                    <button
+                        id="button-order"
+                        class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        dropdownToggle
+                        aria-controls="dropdown-order"
+                    >
+                        {{
+                            sort.order === "ascending"
+                                ? "Ascending"
+                                : "Descending"
+                        }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul
+                        id="dropdown-order"
+                        class="dropdown-menu"
+                        *dropdownMenu
+                        role="menu"
+                        aria-labelledby="button-order"
+                    >
+                        <li role="menuitem">
+                            <button
+                                class="dropdown-item"
+                                type="button"
+                                (click)="updateSort({ order: 'ascending' })"
+                            >
+                                Ascending
+                            </button>
+                        </li>
+                        <li role="menuitem">
+                            <button
+                                class="dropdown-item"
+                                type="button"
+                                (click)="updateSort({ order: 'descending' })"
+                            >
+                                Descending
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <span class="input-group-text">Order</span>
             </div>
-            <input type="text" class="form-control" formControlName="value" style="min-width: 8rem;" />
         </div>
-    </form>
-
-    <div class="input-group w-auto">
-        <span class="input-group-text">Sort by</span>
-
-        <div dropdown>
-            <button
-                id="button-sort"
-                class="btn btn-outline-secondary dropdown-toggle"
-                type="button"
-                dropdownToggle
-                aria-controls="dropdown-sort"
-            >
-                {{ displayField(sort.key) }}
-                <span class="caret"></span>
-            </button>
-            <ul
-                id="dropdown-sort"
-                class="dropdown-menu"
-                *dropdownMenu
-                role="menu"
-                aria-labelledby="button-sort"
-            >
-                <li role="menuitem" *ngFor="let field of fields">
-                    <button
-                        class="dropdown-item"
-                        type="button"
-                        (click)="updateSort({ key: field })"
-                    >
-                        {{ displayField(field) }}
-                    </button>
-                </li>
-            </ul>
-        </div>
-
-        <span class="input-group-text">In</span>
-
-        <div dropdown>
-            <button
-                id="button-order"
-                class="btn btn-outline-secondary dropdown-toggle"
-                type="button"
-                dropdownToggle
-                aria-controls="dropdown-order"
-            >
-                {{ sort.order === "ascending" ? "Ascending" : "Descending" }}
-                <span class="caret"></span>
-            </button>
-            <ul
-                id="dropdown-order"
-                class="dropdown-menu"
-                *dropdownMenu
-                role="menu"
-                aria-labelledby="button-order"
-            >
-                <li role="menuitem">
-                    <button
-                        class="dropdown-item"
-                        type="button"
-                        (click)="updateSort({ order: 'ascending' })"
-                    >
-                        Ascending
-                    </button>
-                </li>
-                <li role="menuitem">
-                    <button
-                        class="dropdown-item"
-                        type="button"
-                        (click)="updateSort({ order: 'descending' })"
-                    >
-                        Descending
-                    </button>
-                </li>
-            </ul>
-        </div>
-
-        <span class="input-group-text">Order</span>
     </div>
 </div>
 

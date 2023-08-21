@@ -16,7 +16,7 @@
                 [totalItems]="totalItems"
                 [itemsPerPage]="pageSize"
                 [ngModel]="currentPaginationPage"
-                [maxSize]="9"
+                [maxSize]="paginationMaxSize == 'large' ? 9 : 5"
                 [rotate]="false"
                 (pageChanged)="changePage($event)"
             ></pagination>

@@ -1,6 +1,15 @@
 
+$padding: 5rem;
+$small-padding: 1rem;
+
 main {
-    padding: 5rem;
+    padding: $padding $padding;
     display: flex;
     justify-content: center;
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: $padding $small-padding;
+    }
 }

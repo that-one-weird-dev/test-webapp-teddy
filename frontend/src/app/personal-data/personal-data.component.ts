@@ -16,6 +16,7 @@ import {
     styleUrls: ["./personal-data.component.scss"],
 })
 export class PersonalDataComponent implements OnInit {
+    mediaQuery!: MediaQueryList;
     /** This is the actual current page */
     currentPage: number = 1;
     /** and this is the page that the pagination component displays.
@@ -24,6 +25,7 @@ export class PersonalDataComponent implements OnInit {
      */
     currentPaginationPage: number = 1;
     pageSize: number = 10;
+    paginationMaxSize: "small" | "large" = "large";
     totalItems: number = 100;
     loading: boolean = true;
     highlightId?: string;
@@ -168,5 +170,7 @@ export class PersonalDataComponent implements OnInit {
         this.route.fragment.subscribe((fragment) => {
             this.highlightId = fragment ?? "";
         });
+
+        this.paginationMaxSize = window.innerWidth > 600 ? "large" : "small";
     }
 }
