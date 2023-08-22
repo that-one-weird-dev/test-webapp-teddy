@@ -26,6 +26,7 @@
             <accordion-group
                 *ngFor="let data of personalData"
                 class="p-1"
+                [id]="data.id"
                 [isOpen]="highlightId == data.id"
             >
                 <span accordion-heading>

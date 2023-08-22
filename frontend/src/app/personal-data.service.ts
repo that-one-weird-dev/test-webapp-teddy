@@ -15,8 +15,6 @@ export class PersonalDataService {
     baseUrl = "http://localhost:3000";
     personalDataUrl = `${this.baseUrl}/personal-data`;
 
-    constructor() {}
-
     async getPaginatedPersonalData(
         page: number,
         limit: number,
@@ -73,6 +71,13 @@ export class PersonalDataService {
         await fetch(`${this.personalDataUrl}/${id}`, {
             method: "DELETE",
         });
+    }
+
+    async findRowIndexOfId(id: string): Promise<number> {
+        const response = await fetch(`${this.personalDataUrl}?_sort=firstname&_order=asc`)
+        const personalData: PersonalData[] = (await response.json()) ?? [];
+
+        return personalData.findIndex(data => data.id === id);
     }
 
     private generateRandomId(): string {

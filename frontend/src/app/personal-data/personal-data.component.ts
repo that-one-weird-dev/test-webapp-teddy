@@ -9,6 +9,9 @@ import {
     PersonalDataSort,
     isPersonalDataSortOrder,
 } from "../personal-data-sort";
+import { ViewportScroller } from "@angular/common";
+
+export const PersonalDataListPageSize: number = 10;
 
 @Component({
     selector: "personal-data",
@@ -24,7 +27,7 @@ export class PersonalDataComponent implements OnInit {
      *  every time the currentPage is changed meaning double the rest api calls, which is no good :(
      */
     currentPaginationPage: number = 1;
-    pageSize: number = 10;
+    pageSize: number = PersonalDataListPageSize;
     paginationMaxSize: "small" | "large" = "large";
     totalItems: number = 100;
     loading: boolean = true;
@@ -36,7 +39,11 @@ export class PersonalDataComponent implements OnInit {
     personalData!: PersonalData[];
     personalDataService: PersonalDataService = inject(PersonalDataService);
 
-    constructor(private route: ActivatedRoute, private router: Router) {}
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private viewportScroller: ViewportScroller
+    ) {}
 
     edit(data: PersonalData) {
         this.router.navigate(["/edit", data.id]);
@@ -116,6 +123,11 @@ export class PersonalDataComponent implements OnInit {
         this.totalItems = data.totalCount;
         this.loading = false;
         this.currentPaginationPage = this.currentPage;
+
+        // I need to use setTimout because this needs to run after the component view is loaded
+        setTimeout(() => {
+            this.viewportScroller.scrollToAnchor(this.highlightId ?? "");
+        });
     }
 
     isDefaultSort(sort: PersonalDataSort): boolean {
@@ -165,7 +177,7 @@ export class PersonalDataComponent implements OnInit {
             this.updateData();
         });
 
-        this.route.fragment.subscribe((fragment) => {
+        this.route.fragment.subscribe(async (fragment) => {
             this.highlightId = fragment ?? "";
         });
 
