@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { PersonalData } from "./personal-data";
-import { PersonalDataFilter } from "./personal-data-filter";
-import { PersonalDataSort } from "./personal-data-sort";
+import { PersonalData } from "../interfaces/personal-data";
+import { PersonalDataFilter } from "../interfaces/personal-data-filter";
+import { PersonalDataSort } from "../interfaces/personal-data-sort";
 
 export interface PaginatedPersonalData {
     personalData: PersonalData[];
@@ -74,10 +74,12 @@ export class PersonalDataService {
     }
 
     async findRowIndexOfId(id: string): Promise<number> {
-        const response = await fetch(`${this.personalDataUrl}?_sort=firstname&_order=asc`)
+        const response = await fetch(
+            `${this.personalDataUrl}?_sort=firstname&_order=asc`
+        );
         const personalData: PersonalData[] = (await response.json()) ?? [];
 
-        return personalData.findIndex(data => data.id === id);
+        return personalData.findIndex((data) => data.id === id);
     }
 
     private generateRandomId(): string {

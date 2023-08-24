@@ -1,7 +1,10 @@
 import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { PersonalData, personalDataKeysToDisplayMap } from "../personal-data";
-import { PersonalDataService } from "../personal-data.service";
+import {
+    PersonalData,
+    personalDataKeysToDisplayMap,
+} from "../../interfaces/personal-data";
+import { PersonalDataService } from "../../services/personal-data.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 import { PersonalDataListPageSize } from "../personal-data/personal-data.component";
@@ -118,7 +121,7 @@ export class PersonalDataEditComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.paramMap.subscribe((params) => {
-            const id = params.get('id');
+            const id = params.get("id");
 
             if (!id) {
                 // This means we are in the /add path because we have no id paramter

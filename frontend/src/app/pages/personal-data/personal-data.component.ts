@@ -1,14 +1,17 @@
 import { Component, OnInit, inject } from "@angular/core";
-import { PersonalData, isPersonalDataKey } from "../personal-data";
-import { PersonalDataService } from "../personal-data.service";
+import {
+    PersonalData,
+    isPersonalDataKey,
+} from "../../interfaces/personal-data";
+import { PersonalDataService } from "../../services/personal-data.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import Swal from "sweetalert2";
-import { PersonalDataFilter } from "../personal-data-filter";
+import { PersonalDataFilter } from "../../interfaces/personal-data-filter";
 import {
     PersonalDataSort,
     isPersonalDataSortOrder,
-} from "../personal-data-sort";
+} from "../../interfaces/personal-data-sort";
 import { ViewportScroller } from "@angular/common";
 
 export const PersonalDataListPageSize: number = 10;

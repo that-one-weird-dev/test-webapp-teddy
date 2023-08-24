@@ -1,8 +1,11 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { PersonalData, personalDataKeysToDisplayMap } from "../personal-data";
+import {
+    PersonalData,
+    personalDataKeysToDisplayMap,
+} from "../../interfaces/personal-data";
 import { FormControl, FormGroup } from "@angular/forms";
-import { PersonalDataFilter } from "../personal-data-filter";
-import { PersonalDataSort } from "../personal-data-sort";
+import { PersonalDataFilter } from "../../interfaces/personal-data-filter";
+import { PersonalDataSort } from "../../interfaces/personal-data-sort";
 
 @Component({
     selector: "personal-data-filter",
