@@ -17,7 +17,7 @@ function createPersonalData(id) {
         place: faker.location.city(),
         city: faker.location.city(),
         province: faker.location.county(),
-        note: faker.person.bio(),
+        notes: faker.person.bio(),
     };
 }
 

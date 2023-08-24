@@ -7,7 +7,7 @@ export interface PersonalData {
     place?: string;
     city?: string;
     province?: string;
-    note?: string;
+    notes?: string;
 }
 
 /** A dictionary containing the mapping from a key of PersonalData to a displayable string */
@@ -20,7 +20,7 @@ export const personalDataKeysToDisplayMap: { [P in keyof PersonalData]-?: string
     "place": "Place",
     "city": "City",
     "province": "Province",
-    "note": "Note",
+    "notes": "Notes",
 };
 
 export function isPersonalDataKey(key: string): key is keyof PersonalData {

@@ -48,7 +48,7 @@ export class PersonalDataEditComponent implements OnInit {
             place: this.editForm.value.place ?? undefined,
             city: this.editForm.value.city ?? undefined,
             province: this.editForm.value.province ?? undefined,
-            note: this.editForm.value.note ?? undefined,
+            notes: this.editForm.value.note ?? undefined,
         };
 
         switch (this.pageFunctionality) {
@@ -138,7 +138,7 @@ export class PersonalDataEditComponent implements OnInit {
                     place: this.personalData.place,
                     city: this.personalData.city,
                     province: this.personalData.province,
-                    note: this.personalData.note,
+                    note: this.personalData.notes,
                 });
                 this.loading = false;
             });
