@@ -26,9 +26,15 @@ public class PersonalDataService {
         return new PersonalDataCreateResponseModel(id);
     }
 
-    public PersonalDataEditResponseModel edit(Long id, PersonalData personalData) throws SQLException {
+    public EmptyResponseModel edit(Long id, PersonalData personalData) throws SQLException {
         repository.edit(id, personalData);
 
-        return new PersonalDataEditResponseModel();
+        return new EmptyResponseModel();
+    }
+
+    public EmptyResponseModel delete(Long id) throws SQLException {
+        repository.delete(id);
+
+        return new EmptyResponseModel();
     }
 }

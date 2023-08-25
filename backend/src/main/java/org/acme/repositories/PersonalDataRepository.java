@@ -71,6 +71,17 @@ public class PersonalDataRepository {
         connection.close();
     }
 
+    public void delete(Long id) throws SQLException {
+        final Connection connection = dataSource.getConnection();
+        final String queryString = "delete from personal_data where id=?";
+
+        final PreparedStatement statement = connection.prepareStatement(queryString);
+        statement.setLong(1, id);
+        statement.executeUpdate();
+
+        connection.close();
+    }
+
     private static void appendPersonalDataParameters(PreparedStatement statement, PersonalData personalData) throws SQLException {
         statement.setString(1, personalData.firstname());
         statement.setString(2, personalData.surname());

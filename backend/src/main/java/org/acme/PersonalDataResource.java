@@ -5,7 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.acme.models.PersonalData;
 import org.acme.models.PersonalDataCreateResponseModel;
-import org.acme.models.PersonalDataEditResponseModel;
+import org.acme.models.EmptyResponseModel;
 import org.acme.models.ResponseModel;
 import org.acme.services.PersonalDataService;
 import org.jboss.resteasy.reactive.RestQuery;
@@ -21,12 +21,12 @@ public class PersonalDataResource {
 
     @GET
     public ResponseModel<List<PersonalData>> list(
-        @RestQuery String filters,
-        @RestQuery String sort
+            @RestQuery String filters,
+            @RestQuery String sort
     ) {
         try {
             return new ResponseModel<>(service.list(filters, sort));
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             return new ResponseModel<>("Error while listing personal data");
         }
     }
@@ -35,17 +35,27 @@ public class PersonalDataResource {
     public ResponseModel<PersonalDataCreateResponseModel> create(PersonalData personalData) {
         try {
             return new ResponseModel<>(service.create(personalData));
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             return new ResponseModel<>("Error while creating personal data");
         }
     }
 
     @PUT
     @Path("/{id}")
-    public ResponseModel<PersonalDataEditResponseModel> edit(Long id, PersonalData personalData) {
+    public ResponseModel<EmptyResponseModel> edit(Long id, PersonalData personalData) {
         try {
             return new ResponseModel<>(service.edit(id, personalData));
-        } catch(Exception ex) {
+        } catch (Exception ex) {
+            return new ResponseModel<>("Error while editing personal data");
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public ResponseModel<EmptyResponseModel> delete(Long id) {
+        try {
+            return new ResponseModel<>(service.delete(id));
+        } catch (Exception ex) {
             return new ResponseModel<>("Error while editing personal data");
         }
     }
