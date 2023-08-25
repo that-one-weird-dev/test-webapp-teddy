@@ -7,17 +7,21 @@ import org.acme.repositories.PersonalDataRepository;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class PersonalDataService {
     @Inject
     PersonalDataRepository repository;
 
-    public List<PersonalData> list(String filtersString, String sortString) throws SQLException {
+    private static final Integer DEFAULT_PAGE = 0;
+    private static final Integer DEFAULT_PAGE_SIZE = 10;
+
+    public List<PersonalData> list(String filtersString, String sortString, Optional<Integer> page, Optional<Integer> pageSize) throws SQLException {
         List<PersonalDataFilter> filters = PersonalDataFilter.fromFiltersString(filtersString);
         PersonalDataSort sort = PersonalDataSort.fromSortString(sortString);
 
-        return repository.listAll(filters, sort);
+        return repository.listAll(filters, sort, page.orElse(DEFAULT_PAGE), pageSize.orElse(DEFAULT_PAGE_SIZE));
     }
 
     public PersonalData get(Long id) throws SQLException {

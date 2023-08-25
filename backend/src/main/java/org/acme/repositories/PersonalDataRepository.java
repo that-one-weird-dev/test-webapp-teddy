@@ -19,10 +19,13 @@ public class PersonalDataRepository {
     @Inject
     DataSource dataSource;
 
-    public List<PersonalData> listAll(List<PersonalDataFilter> filters, PersonalDataSort sort) throws SQLException {
+    public List<PersonalData> listAll(
+            List<PersonalDataFilter> filters, PersonalDataSort sort,
+            Integer page, Integer pageSize) throws SQLException {
+
         final Connection connection = dataSource.getConnection();
 
-        final String queryString = createQueryStringForListAll(filters, sort);
+        final String queryString = createQueryStringForListAll(filters, sort, page, pageSize);
 
         final PreparedStatement statement = connection.prepareStatement(queryString);
         appendStatementParametersForListAll(statement, filters);
@@ -113,7 +116,9 @@ public class PersonalDataRepository {
         statement.setString(8, personalData.notes());
     }
 
-    private static String createQueryStringForListAll(List<PersonalDataFilter> filters, PersonalDataSort sort) {
+    private static String createQueryStringForListAll(List<PersonalDataFilter> filters, PersonalDataSort sort,
+                                                      Integer page, Integer pageSize) {
+
         StringBuilder queryString = new StringBuilder("select * from personal_data");
 
         if (filters.size() > 0) {
@@ -137,6 +142,12 @@ public class PersonalDataRepository {
             case ASCENDING -> " ASC";
             case DESCENDING -> " DESC";
         });
+
+        queryString.append(" LIMIT ");
+        queryString.append(pageSize);
+
+        queryString.append(" OFFSET ");
+        queryString.append(page * pageSize);
 
         return queryString.toString();
     }
