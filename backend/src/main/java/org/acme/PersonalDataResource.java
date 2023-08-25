@@ -3,10 +3,7 @@ package org.acme;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.acme.models.PersonalData;
-import org.acme.models.PersonalDataCreateResponseModel;
-import org.acme.models.EmptyResponseModel;
-import org.acme.models.ResponseModel;
+import org.acme.models.*;
 import org.acme.services.PersonalDataService;
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -21,7 +18,7 @@ public class PersonalDataResource {
     PersonalDataService service;
 
     @GET
-    public ResponseModel<List<PersonalData>> list(
+    public ResponseModel<PersonalDataListResponseModel> list(
             @RestQuery String filters,
             @RestQuery String sort,
             @RestQuery Optional<Integer> page,

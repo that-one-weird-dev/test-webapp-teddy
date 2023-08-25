@@ -17,11 +17,14 @@ public class PersonalDataService {
     private static final Integer DEFAULT_PAGE = 0;
     private static final Integer DEFAULT_PAGE_SIZE = 10;
 
-    public List<PersonalData> list(String filtersString, String sortString, Optional<Integer> page, Optional<Integer> pageSize) throws SQLException {
+    public PersonalDataListResponseModel list(String filtersString, String sortString, Optional<Integer> page, Optional<Integer> pageSize) throws SQLException {
         List<PersonalDataFilter> filters = PersonalDataFilter.fromFiltersString(filtersString);
         PersonalDataSort sort = PersonalDataSort.fromSortString(sortString);
 
-        return repository.listAll(filters, sort, page.orElse(DEFAULT_PAGE), pageSize.orElse(DEFAULT_PAGE_SIZE));
+        List<PersonalData> data = repository.listAll(filters, sort, page.orElse(DEFAULT_PAGE), pageSize.orElse(DEFAULT_PAGE_SIZE));
+        int totalCount = repository.countAll();
+
+        return new PersonalDataListResponseModel(data, totalCount);
     }
 
     public PersonalData get(Long id) throws SQLException {

@@ -105,6 +105,17 @@ public class PersonalDataRepository {
         connection.close();
     }
 
+    public int countAll() throws SQLException {
+        final Connection connection = dataSource.getConnection();
+
+        final String queryString = "select count(*) as total_count from personal_data";
+        final PreparedStatement statement = connection.prepareStatement(queryString);
+        final ResultSet resultSet = statement.executeQuery();
+
+        resultSet.next();
+        return resultSet.getInt("total_count");
+    }
+
     private static void appendPersonalDataParameters(PreparedStatement statement, PersonalData personalData) throws SQLException {
         statement.setString(1, personalData.firstname());
         statement.setString(2, personalData.surname());
