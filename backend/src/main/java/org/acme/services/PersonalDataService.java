@@ -2,10 +2,7 @@ package org.acme.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.acme.models.PersonalData;
-import org.acme.models.PersonalDataFilter;
-import org.acme.models.PersonalDataResponseModel;
-import org.acme.models.PersonalDataSort;
+import org.acme.models.*;
 import org.acme.repositories.PersonalDataRepository;
 
 import java.sql.SQLException;
@@ -23,9 +20,15 @@ public class PersonalDataService {
         return repository.listAll(filters, sort);
     }
 
-    public PersonalDataResponseModel create(PersonalData personalData) throws SQLException {
+    public PersonalDataCreateResponseModel create(PersonalData personalData) throws SQLException {
         Long id = repository.create(personalData);
 
-        return new PersonalDataResponseModel(id);
+        return new PersonalDataCreateResponseModel(id);
+    }
+
+    public PersonalDataEditResponseModel edit(Long id, PersonalData personalData) throws SQLException {
+        repository.edit(id, personalData);
+
+        return new PersonalDataEditResponseModel();
     }
 }

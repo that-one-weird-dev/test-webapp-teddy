@@ -1,13 +1,11 @@
 package org.acme;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.acme.models.PersonalData;
-import org.acme.models.PersonalDataResponseModel;
+import org.acme.models.PersonalDataCreateResponseModel;
+import org.acme.models.PersonalDataEditResponseModel;
 import org.acme.models.ResponseModel;
 import org.acme.services.PersonalDataService;
 import org.jboss.resteasy.reactive.RestQuery;
@@ -34,11 +32,21 @@ public class PersonalDataResource {
     }
 
     @POST
-    public ResponseModel<PersonalDataResponseModel> create(PersonalData personalData) {
+    public ResponseModel<PersonalDataCreateResponseModel> create(PersonalData personalData) {
         try {
             return new ResponseModel<>(service.create(personalData));
         } catch(SQLException ex) {
             return new ResponseModel<>("Error while creating personal data");
+        }
+    }
+
+    @PUT
+    @Path("/{id}")
+    public ResponseModel<PersonalDataEditResponseModel> edit(Long id, PersonalData personalData) {
+        try {
+            return new ResponseModel<>(service.edit(id, personalData));
+        } catch(Exception ex) {
+            return new ResponseModel<>("Error while editing personal data");
         }
     }
 }

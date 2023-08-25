@@ -46,14 +46,7 @@ public class PersonalDataRepository {
                 "returning id";
 
         final PreparedStatement statement = connection.prepareStatement(queryString);
-        statement.setString(1, personalData.firstname());
-        statement.setString(2, personalData.surname());
-        statement.setString(3, personalData.email());
-        statement.setString(4, personalData.address());
-        statement.setString(5, personalData.place());
-        statement.setString(6, personalData.city());
-        statement.setString(7, personalData.province());
-        statement.setString(8, personalData.notes());
+        appendPersonalDataParameters(statement, personalData);
 
         ResultSet resultSet = statement.executeQuery();
         resultSet.next();
@@ -63,7 +56,33 @@ public class PersonalDataRepository {
         return id;
     }
 
-    private String createQueryStringForListAll(List<PersonalDataFilter> filters, PersonalDataSort sort) {
+    public void edit(Long id, PersonalData personalData) throws SQLException {
+        final Connection connection = dataSource.getConnection();
+        final String queryString = "update personal_data " +
+                "SET firstname=?, surname=?, email=?, address=?, place=?, city=?, province=?, notes=? " +
+                "WHERE id=?";
+
+        final PreparedStatement statement = connection.prepareStatement(queryString);
+        appendPersonalDataParameters(statement, personalData);
+        statement.setLong(9, id);
+
+        statement.executeUpdate();
+
+        connection.close();
+    }
+
+    private static void appendPersonalDataParameters(PreparedStatement statement, PersonalData personalData) throws SQLException {
+        statement.setString(1, personalData.firstname());
+        statement.setString(2, personalData.surname());
+        statement.setString(3, personalData.email());
+        statement.setString(4, personalData.address());
+        statement.setString(5, personalData.place());
+        statement.setString(6, personalData.city());
+        statement.setString(7, personalData.province());
+        statement.setString(8, personalData.notes());
+    }
+
+    private static String createQueryStringForListAll(List<PersonalDataFilter> filters, PersonalDataSort sort) {
         StringBuilder queryString = new StringBuilder("select * from personal_data");
 
         if (filters.size() > 0) {
@@ -91,7 +110,7 @@ public class PersonalDataRepository {
         return queryString.toString();
     }
 
-    private void appendStatementParametersForListAll(PreparedStatement statement,
+    private static void appendStatementParametersForListAll(PreparedStatement statement,
                                                      List<PersonalDataFilter> filters) throws SQLException {
         int parameterId = 1;
 
