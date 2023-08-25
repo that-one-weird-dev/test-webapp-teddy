@@ -186,7 +186,7 @@ export class PersonalDataComponent implements OnInit {
             this.updateData();
         });
 
-        this.route.fragment.subscribe(async (fragment) => {
+        this.route.fragment.subscribe((fragment) => {
             this.highlightId = fragment ?? "";
         });
 

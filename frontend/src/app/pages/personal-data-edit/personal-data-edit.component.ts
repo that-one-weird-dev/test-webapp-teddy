@@ -81,7 +81,7 @@ export class PersonalDataEditComponent implements OnInit {
         if (!result.isConfirmed) return;
 
         this.personalDataService.editPersonalData(data).subscribe(() => {
-            this.navigateToHomepage(this.personalData?.id);
+            this.navigateToHomepage(data.id);
         });
     }
 
@@ -106,22 +106,18 @@ export class PersonalDataEditComponent implements OnInit {
     }
 
     async navigateToHomepage(id?: string) {
-        this.router.navigate(["/"]);
-        return;
-
         if (!id) {
             this.router.navigate(["/"]);
             return;
         }
 
-        const index = await this.personalDataService.findRowIndexOfId(id ?? "");
-        const page = Math.floor(index / PersonalDataListPageSize) + 1;
-
-        this.router.navigate(["/"], {
-            fragment: id,
-            queryParams: {
-                page,
-            },
+        this.personalDataService.findPageOfId(id).subscribe((data) => {
+            this.router.navigate(["/"], {
+                fragment: id,
+                queryParams: {
+                    page: data.page + 1,
+                },
+            });
         });
     }
 

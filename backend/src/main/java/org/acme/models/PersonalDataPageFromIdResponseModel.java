@@ -1,4 +1,4 @@
 package org.acme.models;
 
-public record PageFromIdResponseModel(int page) {
+public record PersonalDataPageFromIdResponseModel(int page) {
 }

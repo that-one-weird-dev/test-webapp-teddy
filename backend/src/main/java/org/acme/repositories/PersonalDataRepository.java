@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class PersonalDataRepository {
@@ -28,7 +29,7 @@ public class PersonalDataRepository {
         final String queryString = createQueryStringForListAll(filters, sort, page, pageSize);
 
         final PreparedStatement statement = connection.prepareStatement(queryString);
-        appendStatementParametersForListAll(statement, filters);
+        appendFiltersParameters(statement, filters);
 
         final ResultSet resultSet = statement.executeQuery();
 
@@ -133,6 +134,33 @@ public class PersonalDataRepository {
         return totalCount;
     }
 
+    public Optional<Integer> indexOfId(Long id) throws SQLException {
+        final Connection connection = dataSource.getConnection();
+
+        final StringBuilder queryString = new StringBuilder();
+        queryString.append("SELECT row_number FROM (");
+        queryString.append("SELECT ROW_NUMBER() OVER() as row_number, pd.id FROM personal_data pd");
+        appendSortOrderByClause(queryString, PersonalDataSort.DEFAULT);
+        queryString.append(") x WHERE x.id=?");
+
+        final PreparedStatement statement = connection.prepareStatement(queryString.toString());
+        statement.setLong(1, id);
+
+        final ResultSet resultSet = statement.executeQuery();
+
+        if (!resultSet.next()) {
+            return Optional.empty();
+        }
+
+        final int index = resultSet.getInt("row_number");
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return Optional.of(index);
+    }
+
     private static void appendPersonalDataParameters(PreparedStatement statement, PersonalData personalData) throws SQLException {
         statement.setString(1, personalData.firstname());
         statement.setString(2, personalData.surname());
@@ -149,6 +177,19 @@ public class PersonalDataRepository {
 
         StringBuilder queryString = new StringBuilder("select * from personal_data");
 
+        appendFiltersWhereClause(queryString, filters);
+        appendSortOrderByClause(queryString, sort);
+
+        queryString.append(" LIMIT ");
+        queryString.append(pageSize);
+
+        queryString.append(" OFFSET ");
+        queryString.append(page * pageSize);
+
+        return queryString.toString();
+    }
+
+    private static void appendFiltersWhereClause(StringBuilder queryString, List<PersonalDataFilter> filters) {
         if (filters.size() > 0) {
             queryString.append(" WHERE");
         }
@@ -162,7 +203,9 @@ public class PersonalDataRepository {
             queryString.append(filters.get(i).key().getIdentifier());
             queryString.append(" LIKE ?");
         }
+    }
 
+    private static void appendSortOrderByClause(StringBuilder queryString, PersonalDataSort sort) {
         queryString.append(" ORDER BY ");
         queryString.append(sort.key().getIdentifier());
 
@@ -170,18 +213,10 @@ public class PersonalDataRepository {
             case ASCENDING -> " ASC";
             case DESCENDING -> " DESC";
         });
-
-        queryString.append(" LIMIT ");
-        queryString.append(pageSize);
-
-        queryString.append(" OFFSET ");
-        queryString.append(page * pageSize);
-
-        return queryString.toString();
     }
 
-    private static void appendStatementParametersForListAll(PreparedStatement statement,
-                                                     List<PersonalDataFilter> filters) throws SQLException {
+    private static void appendFiltersParameters(PreparedStatement statement,
+                                                List<PersonalDataFilter> filters) throws SQLException {
         int parameterId = 1;
 
         for (PersonalDataFilter filter : filters) {

@@ -11,6 +11,7 @@ import {
 import { HttpClient } from "@angular/common/http";
 import { Observable, catchError, map } from "rxjs";
 import { PersonalDataCreateModel } from "../interfaces/models/personal-data-create-model";
+import { PersonalDataPageOfModel } from "../interfaces/models/personal-data-page-of-model";
 
 function mapResponseError<T>() {
     return map((response: ResponseModel<T>) => {
@@ -91,12 +92,11 @@ export class PersonalDataService {
             .pipe(mapResponseError());
     }
 
-    async findRowIndexOfId(id: string): Promise<number> {
-        const response = await fetch(
-            `${this.personalDataUrl}?_sort=firstname&_order=asc`
-        );
-        const personalData: PersonalData[] = (await response.json()) ?? [];
-
-        return personalData.findIndex((data) => data.id === id);
+    findPageOfId(id: string): Observable<PersonalDataPageOfModel> {
+        return this.httpClient
+            .get<ResponseModel<PersonalDataPageOfModel>>(
+                `${this.personalDataUrl}/page-of/${id}`
+            )
+            .pipe(mapResponseError());
     }
 }

@@ -8,7 +8,6 @@ import org.acme.services.PersonalDataService;
 import org.jboss.resteasy.reactive.RestQuery;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 @Path("/api/personal-data")
@@ -19,11 +18,8 @@ public class PersonalDataResource {
 
     @GET
     public ResponseModel<PersonalDataListResponseModel> list(
-            @RestQuery String filters,
-            @RestQuery String sort,
-            @RestQuery Optional<Integer> page,
-            @RestQuery Optional<Integer> pageSize
-    ) {
+            @RestQuery String filters, @RestQuery String sort,
+            @RestQuery Optional<Integer> page, @RestQuery Optional<Integer> pageSize) {
         try {
             return new ResponseModel<>(service.list(filters, sort, page, pageSize));
         } catch (SQLException ex) {
@@ -43,6 +39,19 @@ public class PersonalDataResource {
             return new ResponseModel<>(data);
         } catch (SQLException ex) {
             return new ResponseModel<>("Error while listing personal personalData");
+        }
+    }
+
+    @GET
+    @Path("/page-of/{id}")
+    public ResponseModel<PersonalDataPageFromIdResponseModel> pageFromId(
+            Long id,
+            @RestQuery Optional<Integer> pageSize) {
+
+        try {
+            return new ResponseModel<>(service.pageFromId(id, pageSize));
+        } catch (SQLException ex) {
+            return new ResponseModel<>("Error while finding the page of id");
         }
     }
 
