@@ -63,8 +63,9 @@ export class PersonalDataComponent implements OnInit {
         if (!result.isConfirmed) return;
 
         this.loading = true;
-        await this.personalDataService.deletePersonalData(data.id);
-        await this.updateData();
+        this.personalDataService.deletePersonalData(data.id).subscribe(() => {
+            this.updateData();
+        })
     }
 
     addFilters(filters: PersonalDataFilter[]) {
