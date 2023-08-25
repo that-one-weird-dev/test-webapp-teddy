@@ -64,10 +64,12 @@ export class PersonalDataEditComponent implements OnInit {
         }
     }
 
-    async submitCreate(data: PersonalData) {
-        const id = await this.personalDataService.createPersonalData(data);
-
-        this.navigateToHomepage(id);
+    submitCreate(data: PersonalData) {
+        this.personalDataService
+            .createPersonalData(data)
+            .subscribe((response) => {
+                this.navigateToHomepage(response.id.toString());
+            });
     }
 
     async submitEdit(data: PersonalData) {
@@ -78,8 +80,9 @@ export class PersonalDataEditComponent implements OnInit {
 
         if (!result.isConfirmed) return;
 
-        await this.personalDataService.editPersonalData(data);
-        this.navigateToHomepage(this.personalData?.id);
+        this.personalDataService.editPersonalData(data).subscribe(() => {
+            this.navigateToHomepage(this.personalData?.id);
+        });
     }
 
     cancel() {
@@ -103,12 +106,15 @@ export class PersonalDataEditComponent implements OnInit {
     }
 
     async navigateToHomepage(id?: string) {
+        this.router.navigate(["/"]);
+        return;
+
         if (!id) {
             this.router.navigate(["/"]);
             return;
         }
 
-        const index = await this.personalDataService.findRowIndexOfId(id);
+        const index = await this.personalDataService.findRowIndexOfId(id ?? "");
         const page = Math.floor(index / PersonalDataListPageSize) + 1;
 
         this.router.navigate(["/"], {
@@ -130,21 +136,23 @@ export class PersonalDataEditComponent implements OnInit {
             }
 
             this.loading = true;
-            this.personalDataService.getPersonalDataById(id).then((data) => {
-                this.personalData = data;
+            this.personalDataService
+                .getPersonalDataById(id)
+                .subscribe((data) => {
+                    this.personalData = data;
 
-                this.editForm.setValue({
-                    firstname: this.personalData.firstname,
-                    surname: this.personalData.surname,
-                    email: this.personalData.email,
-                    address: this.personalData.address,
-                    place: this.personalData.place,
-                    city: this.personalData.city,
-                    province: this.personalData.province,
-                    note: this.personalData.notes,
+                    this.editForm.setValue({
+                        firstname: this.personalData.firstname,
+                        surname: this.personalData.surname,
+                        email: this.personalData.email,
+                        address: this.personalData.address,
+                        place: this.personalData.place,
+                        city: this.personalData.city,
+                        province: this.personalData.province,
+                        note: this.personalData.notes,
+                    });
+                    this.loading = false;
                 });
-                this.loading = false;
-            });
         });
     }
 }

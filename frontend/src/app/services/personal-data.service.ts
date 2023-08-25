@@ -10,6 +10,17 @@ import {
 } from "../interfaces/models/response-model";
 import { HttpClient } from "@angular/common/http";
 import { Observable, catchError, map } from "rxjs";
+import { PersonalDataCreateModel } from "../interfaces/models/personal-data-create-model";
+
+function mapResponseError<T>() {
+    return map((response: ResponseModel<T>) => {
+        if (responseIsError(response)) {
+            throw new Error(response.error);
+        }
+
+        return response.data;
+    });
+}
 
 @Injectable({
     providedIn: "root",
@@ -48,56 +59,36 @@ export class PersonalDataService {
                     },
                 }
             )
-            .pipe(
-                map((response) => {
-                    if (responseIsError(response)) {
-                        throw new Error(response.error);
-                    }
-
-                    return response.data;
-                })
-            );
+            .pipe(mapResponseError());
     }
 
-    async getPersonalDataById(id: string): Promise<PersonalData> {
-        const data = await fetch(`${this.personalDataUrl}/${id}`);
-
-        const response = (await data.json()) as ResponseModel<PersonalData>;
-
-        if (responseIsError(response)) {
-            throw Promise.reject(response.error);
-        }
-
-        return response.data;
+    getPersonalDataById(id: string): Observable<PersonalData> {
+        return this.httpClient
+            .get<ResponseModel<PersonalData>>(`${this.personalDataUrl}/${id}`)
+            .pipe(mapResponseError());
     }
 
-    async createPersonalData(data: PersonalData): Promise<string> {
-        data.id = this.generateRandomId();
-        await fetch(`${this.personalDataUrl}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
-
-        return data.id;
+    createPersonalData(
+        data: PersonalData
+    ): Observable<PersonalDataCreateModel> {
+        return this.httpClient
+            .post<ResponseModel<PersonalDataCreateModel>>(
+                this.personalDataUrl,
+                data
+            )
+            .pipe(mapResponseError());
     }
 
-    async editPersonalData(data: PersonalData) {
-        await fetch(`${this.personalDataUrl}/${data.id}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
+    editPersonalData(data: PersonalData): Observable<{}> {
+        return this.httpClient
+            .put<ResponseModel<{}>>(`${this.personalDataUrl}/${data.id}`, data)
+            .pipe(mapResponseError());
     }
 
-    async deletePersonalData(id: string) {
-        await fetch(`${this.personalDataUrl}/${id}`, {
-            method: "DELETE",
-        });
+    deletePersonalData(id: string): Observable<{}> {
+        return this.httpClient
+            .delete<ResponseModel<{}>>(`${this.personalDataUrl}/${id}`)
+            .pipe(mapResponseError());
     }
 
     async findRowIndexOfId(id: string): Promise<number> {
@@ -107,9 +98,5 @@ export class PersonalDataService {
         const personalData: PersonalData[] = (await response.json()) ?? [];
 
         return personalData.findIndex((data) => data.id === id);
-    }
-
-    private generateRandomId(): string {
-        return Math.random().toString(36).slice(2);
     }
 }
