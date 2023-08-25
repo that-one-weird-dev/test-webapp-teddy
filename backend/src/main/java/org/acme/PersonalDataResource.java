@@ -31,6 +31,21 @@ public class PersonalDataResource {
         }
     }
 
+    @GET
+    @Path("/{id}")
+    public ResponseModel<PersonalData> get(Long id) {
+        try {
+            PersonalData data = service.get(id);
+            if (data == null) {
+                return new ResponseModel<>("Requested data does not exist");
+            }
+
+            return new ResponseModel<>(data);
+        } catch (SQLException ex) {
+            return new ResponseModel<>("Error while listing personal data");
+        }
+    }
+
     @POST
     public ResponseModel<PersonalDataCreateResponseModel> create(PersonalData personalData) {
         try {

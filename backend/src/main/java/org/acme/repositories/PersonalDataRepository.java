@@ -38,6 +38,26 @@ public class PersonalDataRepository {
         return result;
     }
 
+    public PersonalData find(Long id) throws SQLException {
+        final Connection connection = dataSource.getConnection();
+
+        final String queryString = "select * from personal_data where id=?";
+
+        final PreparedStatement statement = connection.prepareStatement(queryString);
+        statement.setLong(1, id);
+
+        final ResultSet resultSet = statement.executeQuery();
+
+        if (!resultSet.next()) {
+            return null;
+        }
+
+        PersonalData result = PersonalData.fromResultSet(resultSet);
+
+        connection.close();
+        return result;
+    }
+
     public Long create(PersonalData personalData) throws SQLException {
         final Connection connection = dataSource.getConnection();
         final String queryString = "insert into personal_data " +

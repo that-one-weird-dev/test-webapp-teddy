@@ -20,6 +20,10 @@ public class PersonalDataService {
         return repository.listAll(filters, sort);
     }
 
+    public PersonalData get(Long id) throws SQLException {
+        return repository.find(id);
+    }
+
     public PersonalDataCreateResponseModel create(PersonalData personalData) throws SQLException {
         Long id = repository.create(personalData);
 
