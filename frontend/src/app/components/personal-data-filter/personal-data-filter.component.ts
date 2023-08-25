@@ -59,7 +59,7 @@ export class PersonalDataFilterComponent {
         this.filtersAdded.emit(filters);
 
         this.propertyForm.setValue({
-            type: "firstname",
+            type: this.propertyForm.value.type ?? "firstname",
             value: "",
         });
     }
