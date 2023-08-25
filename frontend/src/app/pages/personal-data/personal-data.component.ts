@@ -65,7 +65,7 @@ export class PersonalDataComponent implements OnInit {
         this.loading = true;
         this.personalDataService.deletePersonalData(data.id).subscribe(() => {
             this.updateData();
-        })
+        });
     }
 
     addFilters(filters: PersonalDataFilter[]) {
@@ -124,7 +124,6 @@ export class PersonalDataComponent implements OnInit {
                 this.sort
             )
             .subscribe((data) => {
-                console.log(data.personalData);
                 this.personalData = data.personalData;
                 this.totalItems = data.totalCount;
                 this.loading = false;
@@ -132,9 +131,9 @@ export class PersonalDataComponent implements OnInit {
 
                 // I need to use setTimout because this needs to run after the component view is loaded
                 setTimeout(() => {
-                    this.viewportScroller.scrollToAnchor(
-                        this.highlightId ?? ""
-                    );
+                    if (this.highlightId) {
+                        this.viewportScroller.scrollToAnchor(this.highlightId);
+                    }
                 });
             });
     }
