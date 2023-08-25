@@ -22,7 +22,7 @@ public class PersonalDataRepository {
     public List<PersonalData> listAll(List<PersonalDataFilter> filters, PersonalDataSort sort) throws SQLException {
         final Connection connection = dataSource.getConnection();
 
-        String queryString = createQueryStringForListAll(filters, sort);
+        final String queryString = createQueryStringForListAll(filters, sort);
 
         final PreparedStatement statement = connection.prepareStatement(queryString);
         appendStatementParametersForListAll(statement, filters);
@@ -36,6 +36,31 @@ public class PersonalDataRepository {
 
         connection.close();
         return result;
+    }
+
+    public Long create(PersonalData personalData) throws SQLException {
+        final Connection connection = dataSource.getConnection();
+        final String queryString = "insert into personal_data " +
+                "(firstname, surname, email, address, place, city, province, notes) " +
+                "values (?,?,?,?,?,?,?,?) " +
+                "returning id";
+
+        final PreparedStatement statement = connection.prepareStatement(queryString);
+        statement.setString(1, personalData.firstname());
+        statement.setString(2, personalData.surname());
+        statement.setString(3, personalData.email());
+        statement.setString(4, personalData.address());
+        statement.setString(5, personalData.place());
+        statement.setString(6, personalData.city());
+        statement.setString(7, personalData.province());
+        statement.setString(8, personalData.notes());
+
+        ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        Long id = resultSet.getLong("id");
+
+        connection.close();
+        return id;
     }
 
     private String createQueryStringForListAll(List<PersonalDataFilter> filters, PersonalDataSort sort) {

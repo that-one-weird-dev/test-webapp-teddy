@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.acme.models.PersonalData;
 import org.acme.models.PersonalDataFilter;
+import org.acme.models.PersonalDataResponseModel;
 import org.acme.models.PersonalDataSort;
 import org.acme.repositories.PersonalDataRepository;
 
@@ -20,5 +21,11 @@ public class PersonalDataService {
         PersonalDataSort sort = PersonalDataSort.fromSortString(sortString);
 
         return repository.listAll(filters, sort);
+    }
+
+    public PersonalDataResponseModel create(PersonalData personalData) throws SQLException {
+        Long id = repository.create(personalData);
+
+        return new PersonalDataResponseModel(id);
     }
 }
