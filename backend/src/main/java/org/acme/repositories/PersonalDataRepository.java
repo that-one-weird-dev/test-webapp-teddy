@@ -37,7 +37,10 @@ public class PersonalDataRepository {
             result.add(PersonalData.fromResultSet(resultSet));
         }
 
+        resultSet.close();
+        statement.close();
         connection.close();
+
         return result;
     }
 
@@ -57,7 +60,10 @@ public class PersonalDataRepository {
 
         PersonalData result = PersonalData.fromResultSet(resultSet);
 
+        resultSet.close();
+        statement.close();
         connection.close();
+
         return result;
     }
 
@@ -75,7 +81,10 @@ public class PersonalDataRepository {
         resultSet.next();
         Long id = resultSet.getLong("id");
 
+        resultSet.close();
+        statement.close();
         connection.close();
+
         return id;
     }
 
@@ -91,6 +100,7 @@ public class PersonalDataRepository {
 
         statement.executeUpdate();
 
+        statement.close();
         connection.close();
     }
 
@@ -102,6 +112,7 @@ public class PersonalDataRepository {
         statement.setLong(1, id);
         statement.executeUpdate();
 
+        statement.close();
         connection.close();
     }
 
@@ -113,7 +124,13 @@ public class PersonalDataRepository {
         final ResultSet resultSet = statement.executeQuery();
 
         resultSet.next();
-        return resultSet.getInt("total_count");
+        int totalCount = resultSet.getInt("total_count");
+
+        resultSet.close();
+        statement.close();
+        connection.close();
+
+        return totalCount;
     }
 
     private static void appendPersonalDataParameters(PreparedStatement statement, PersonalData personalData) throws SQLException {
