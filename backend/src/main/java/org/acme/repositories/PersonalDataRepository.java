@@ -132,7 +132,7 @@ public class PersonalDataRepository {
 
             queryString.append(" ");
             queryString.append(filters.get(i).key().getIdentifier());
-            queryString.append("=?");
+            queryString.append(" LIKE ?");
         }
 
         queryString.append(" ORDER BY ");
@@ -157,7 +157,7 @@ public class PersonalDataRepository {
         int parameterId = 1;
 
         for (PersonalDataFilter filter : filters) {
-            statement.setString(parameterId++, filter.value());
+            statement.setString(parameterId++, "%" + filter.value() + "%");
         }
     }
 }
