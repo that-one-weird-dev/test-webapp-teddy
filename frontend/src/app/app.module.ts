@@ -10,13 +10,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { AccordionModule } from "ngx-bootstrap/accordion";
 import { NavbarComponent } from "./components/navbar/navbar.component";
-import {
-    BsDropdownConfig,
-    BsDropdownDirective,
-    BsDropdownModule,
-} from "ngx-bootstrap/dropdown";
+import { BsDropdownDirective, BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { CommonModule } from "@angular/common";
 import { PersonalDataFilterComponent } from "./components/personal-data-filter/personal-data-filter.component";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -29,6 +26,7 @@ import { PersonalDataFilterComponent } from "./components/personal-data-filter/p
     imports: [
         BrowserModule,
         CommonModule,
+        HttpClientModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,

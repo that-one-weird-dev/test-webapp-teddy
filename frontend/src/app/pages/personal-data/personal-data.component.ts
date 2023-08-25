@@ -114,23 +114,28 @@ export class PersonalDataComponent implements OnInit {
         });
     }
 
-    async updateData() {
-        const data = await this.personalDataService.getPaginatedPersonalData(
-            this.currentPage,
-            this.pageSize,
-            this.filters,
-            this.sort
-        );
+    updateData() {
+        this.personalDataService
+            .getPaginatedPersonalData(
+                this.currentPage,
+                this.pageSize,
+                this.filters,
+                this.sort
+            )
+            .subscribe((data) => {
+                console.log(data.personalData);
+                this.personalData = data.personalData;
+                this.totalItems = data.totalCount;
+                this.loading = false;
+                this.currentPaginationPage = this.currentPage;
 
-        this.personalData = data.personalData;
-        this.totalItems = data.totalCount;
-        this.loading = false;
-        this.currentPaginationPage = this.currentPage;
-
-        // I need to use setTimout because this needs to run after the component view is loaded
-        setTimeout(() => {
-            this.viewportScroller.scrollToAnchor(this.highlightId ?? "");
-        });
+                // I need to use setTimout because this needs to run after the component view is loaded
+                setTimeout(() => {
+                    this.viewportScroller.scrollToAnchor(
+                        this.highlightId ?? ""
+                    );
+                });
+            });
     }
 
     isDefaultSort(sort: PersonalDataSort): boolean {

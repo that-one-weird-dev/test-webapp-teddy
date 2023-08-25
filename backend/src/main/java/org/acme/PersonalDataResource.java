@@ -27,7 +27,7 @@ public class PersonalDataResource {
         try {
             return new ResponseModel<>(service.list(filters, sort, page, pageSize));
         } catch (SQLException ex) {
-            return new ResponseModel<>("Error while listing personal data");
+            return new ResponseModel<>("Error while listing personal personalData");
         }
     }
 
@@ -37,12 +37,12 @@ public class PersonalDataResource {
         try {
             PersonalData data = service.get(id);
             if (data == null) {
-                return new ResponseModel<>("Requested data does not exist");
+                return new ResponseModel<>("Requested personalData does not exist");
             }
 
             return new ResponseModel<>(data);
         } catch (SQLException ex) {
-            return new ResponseModel<>("Error while listing personal data");
+            return new ResponseModel<>("Error while listing personal personalData");
         }
     }
 
@@ -51,7 +51,7 @@ public class PersonalDataResource {
         try {
             return new ResponseModel<>(service.create(personalData));
         } catch (SQLException ex) {
-            return new ResponseModel<>("Error while creating personal data");
+            return new ResponseModel<>("Error while creating personal personalData");
         }
     }
 
@@ -61,7 +61,7 @@ public class PersonalDataResource {
         try {
             return new ResponseModel<>(service.edit(id, personalData));
         } catch (Exception ex) {
-            return new ResponseModel<>("Error while editing personal data");
+            return new ResponseModel<>("Error while editing personal personalData");
         }
     }
 
@@ -71,7 +71,7 @@ public class PersonalDataResource {
         try {
             return new ResponseModel<>(service.delete(id));
         } catch (Exception ex) {
-            return new ResponseModel<>("Error while editing personal data");
+            return new ResponseModel<>("Error while editing personal personalData");
         }
     }
 }
