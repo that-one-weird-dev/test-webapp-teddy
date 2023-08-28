@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, ChangeDetectorRef, NgZone } from "@angular/core";
 import {
     PersonalData,
     isPersonalDataKey,
@@ -45,8 +45,9 @@ export class PersonalDataComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private viewportScroller: ViewportScroller
-    ) {}
+        private viewportScroller: ViewportScroller,
+        private zone: NgZone,
+    ) { }
 
     edit(data: PersonalData) {
         this.router.navigate(["/edit", data.id]);
@@ -70,7 +71,7 @@ export class PersonalDataComponent implements OnInit {
 
     addFilters(filters: PersonalDataFilter[]) {
         this.reroute(
-            this.currentPage,
+            1,
             [...this.filters, ...filters],
             this.sort
         );
@@ -78,7 +79,7 @@ export class PersonalDataComponent implements OnInit {
 
     removeFilter(filter: PersonalDataFilter) {
         this.reroute(
-            this.currentPage,
+            1,
             this.filters.filter((f) => f != filter),
             this.sort
         );

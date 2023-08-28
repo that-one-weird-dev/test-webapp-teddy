@@ -117,11 +117,15 @@ public class PersonalDataRepository {
         connection.close();
     }
 
-    public int countAll() throws SQLException {
+    public int countAll(List<PersonalDataFilter> filters) throws SQLException {
         final Connection connection = dataSource.getConnection();
 
-        final String queryString = "select count(*) as total_count from personal_data";
-        final PreparedStatement statement = connection.prepareStatement(queryString);
+        final StringBuilder queryString = new StringBuilder("select count(*) as total_count from personal_data");
+        appendFiltersWhereClause(queryString, filters);
+
+        final PreparedStatement statement = connection.prepareStatement(queryString.toString());
+        appendFiltersParameters(statement, filters);
+
         final ResultSet resultSet = statement.executeQuery();
 
         resultSet.next();
@@ -202,7 +206,7 @@ public class PersonalDataRepository {
 
             queryString.append(" ");
             queryString.append(filters.get(i).key().getIdentifier());
-            queryString.append(" LIKE ?");
+            queryString.append(" iLIKE ?");
         }
     }
 

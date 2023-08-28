@@ -23,7 +23,7 @@ public class PersonalDataService {
         PersonalDataSort sort = PersonalDataSort.fromSortString(sortString);
 
         List<PersonalData> data = repository.listAll(filters, sort, page.orElse(DEFAULT_PAGE), pageSize.orElse(DEFAULT_PAGE_SIZE));
-        int totalCount = repository.countAll();
+        int totalCount = repository.countAll(filters);
 
         return new PersonalDataListResponseModel(data, totalCount);
     }
