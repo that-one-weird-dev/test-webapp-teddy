@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS personal_data (
     city VARCHAR(255),
     province VARCHAR(255),
     notes VARCHAR(255)
-)
+);
