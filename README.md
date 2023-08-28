@@ -24,7 +24,7 @@ The fake data generation is done via a python script inside of `backend/src/main
 it accepts the `schema.sql` as input and outputs a new schema file also containing the fake data generated via faker.
 
 To re-generate the data run this command:
-```
+```sh
 cd backend/src/main/resources/scripts
 
 python fake-data-generation.py schema.sql > schema-fake-data.sql
