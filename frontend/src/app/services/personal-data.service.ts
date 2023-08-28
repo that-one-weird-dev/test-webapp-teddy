@@ -6,12 +6,12 @@ import { PaginatedPersonalDataModel } from "../interfaces/models/paginated-perso
 import {
     ResponseModel,
     responseIsError,
-    responseIsOk,
 } from "../interfaces/models/response-model";
 import { HttpClient } from "@angular/common/http";
 import { Observable, catchError, map } from "rxjs";
 import { PersonalDataCreateModel } from "../interfaces/models/personal-data-create-model";
 import { PersonalDataPageOfModel } from "../interfaces/models/personal-data-page-of-model";
+import { environment } from "src/environments/environment";
 
 function mapResponseError<T>() {
     return map((response: ResponseModel<T>) => {
@@ -27,8 +27,7 @@ function mapResponseError<T>() {
     providedIn: "root",
 })
 export class PersonalDataService {
-    baseUrl = "http://localhost:8080";
-    personalDataUrl = `${this.baseUrl}/api/personal-data`;
+    personalDataUrl = `${environment.apiUrl}/api/personal-data`;
 
     constructor(private httpClient: HttpClient) {}
 
