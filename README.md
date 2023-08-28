@@ -14,7 +14,7 @@ The database is automatically prepared with the schema and also fake data (only 
 ### Angular
 ```sh
 cd frontend
-ng serve
+npm run start
 ```
 This command serves the client locally in development mode at **[localhost:4200](http://localhost:4200)**
 
