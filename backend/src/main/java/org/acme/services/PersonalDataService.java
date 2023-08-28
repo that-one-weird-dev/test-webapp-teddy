@@ -60,7 +60,7 @@ public class PersonalDataService {
     public PersonalDataPageFromIdResponseModel pageFromId(Long id, Optional<Integer> pageSize) throws SQLException {
         int index = repository.indexOfId(id).orElse(0);
 
-        int page = index / DEFAULT_PAGE_SIZE;
+        int page = (index - 1) / DEFAULT_PAGE_SIZE;
 
         return new PersonalDataPageFromIdResponseModel(page);
     }
