@@ -58,7 +58,7 @@ public class PersonalDataResource {
     @POST
     public ResponseModel<PersonalDataCreateResponseModel> create(PersonalData personalData) {
         try {
-            return new ResponseModel<>(service.create(personalData));
+            return service.create(personalData);
         } catch (SQLException ex) {
             return new ResponseModel<>("Error while creating personal personalData");
         }
@@ -68,7 +68,7 @@ public class PersonalDataResource {
     @Path("/{id}")
     public ResponseModel<EmptyResponseModel> edit(Long id, PersonalData personalData) {
         try {
-            return new ResponseModel<>(service.edit(id, personalData));
+            return service.edit(id, personalData);
         } catch (Exception ex) {
             return new ResponseModel<>("Error while editing personal personalData");
         }

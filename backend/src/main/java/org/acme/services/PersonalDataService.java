@@ -31,16 +31,24 @@ public class PersonalDataService {
         return repository.find(id);
     }
 
-    public PersonalDataCreateResponseModel create(PersonalData personalData) throws SQLException {
+    public ResponseModel<PersonalDataCreateResponseModel> create(PersonalData personalData) throws SQLException {
+        if (!personalData.isValid()) {
+            return new ResponseModel<>("Data is not valid");
+        }
+
         Long id = repository.create(personalData);
 
-        return new PersonalDataCreateResponseModel(id);
+        return new ResponseModel<>(new PersonalDataCreateResponseModel(id));
     }
 
-    public EmptyResponseModel edit(Long id, PersonalData personalData) throws SQLException {
+    public ResponseModel<EmptyResponseModel> edit(Long id, PersonalData personalData) throws SQLException {
+        if (!personalData.isValid()) {
+            return new ResponseModel<>("Data is not valid");
+        }
+
         repository.edit(id, personalData);
 
-        return new EmptyResponseModel();
+        return new ResponseModel<>(new EmptyResponseModel());
     }
 
     public EmptyResponseModel delete(Long id) throws SQLException {
