@@ -139,8 +139,9 @@ public class PersonalDataRepository {
 
         final StringBuilder queryString = new StringBuilder();
         queryString.append("SELECT row_number FROM (");
-        queryString.append("SELECT ROW_NUMBER() OVER() as row_number, pd.id FROM personal_data pd");
+        queryString.append("SELECT ROW_NUMBER() OVER(");
         appendSortOrderByClause(queryString, PersonalDataSort.DEFAULT);
+        queryString.append(") as row_number, pd.id FROM personal_data pd");
         queryString.append(") x WHERE x.id=?");
 
         final PreparedStatement statement = connection.prepareStatement(queryString.toString());

@@ -13,9 +13,12 @@ fake = Faker("it_IT")
 
 output = ""
 
+output += "DROP TABLE personal_data;\n\n"
+
 with open(sys.argv[1]) as file:
     output += file.read()
     output += "\n"
+
 
 statementPattern = """INSERT INTO personal_data (firstname, surname, email, address, place, city, province) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}');\n"""
 for _ in range(FAKE_USER_COUNT):
