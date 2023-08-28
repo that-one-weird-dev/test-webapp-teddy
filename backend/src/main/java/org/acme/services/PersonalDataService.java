@@ -1,5 +1,6 @@
 package org.acme.services;
 
+import contstants.ErrorMessages;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.acme.models.*;
@@ -33,7 +34,7 @@ public class PersonalDataService {
 
     public ResponseModel<PersonalDataCreateResponseModel> create(PersonalData personalData) throws SQLException {
         if (!personalData.isValid()) {
-            return new ResponseModel<>("Data is not valid");
+            return new ResponseModel<>(ErrorMessages.InvalidData);
         }
 
         Long id = repository.create(personalData);
@@ -43,7 +44,7 @@ public class PersonalDataService {
 
     public ResponseModel<EmptyResponseModel> edit(Long id, PersonalData personalData) throws SQLException {
         if (!personalData.isValid()) {
-            return new ResponseModel<>("Data is not valid");
+            return new ResponseModel<>(ErrorMessages.InvalidData);
         }
 
         repository.edit(id, personalData);

@@ -1,5 +1,6 @@
 package org.acme;
 
+import contstants.ErrorMessages;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -23,7 +24,7 @@ public class PersonalDataResource {
         try {
             return new ResponseModel<>(service.list(filters, sort, page, pageSize));
         } catch (SQLException ex) {
-            return new ResponseModel<>("Error while listing personal personalData");
+            return new ResponseModel<>(ErrorMessages.InternalServerError);
         }
     }
 
@@ -33,12 +34,12 @@ public class PersonalDataResource {
         try {
             PersonalData data = service.get(id);
             if (data == null) {
-                return new ResponseModel<>("Requested personalData does not exist");
+                return new ResponseModel<>(ErrorMessages.InternalServerError);
             }
 
             return new ResponseModel<>(data);
         } catch (SQLException ex) {
-            return new ResponseModel<>("Error while listing personal personalData");
+            return new ResponseModel<>(ErrorMessages.InternalServerError);
         }
     }
 
@@ -51,7 +52,7 @@ public class PersonalDataResource {
         try {
             return new ResponseModel<>(service.pageFromId(id, pageSize));
         } catch (SQLException ex) {
-            return new ResponseModel<>("Error while finding the page of id");
+            return new ResponseModel<>(ErrorMessages.InternalServerError);
         }
     }
 
@@ -60,7 +61,7 @@ public class PersonalDataResource {
         try {
             return service.create(personalData);
         } catch (SQLException ex) {
-            return new ResponseModel<>("Error while creating personal personalData");
+            return new ResponseModel<>(ErrorMessages.InternalServerError);
         }
     }
 
@@ -70,7 +71,7 @@ public class PersonalDataResource {
         try {
             return service.edit(id, personalData);
         } catch (Exception ex) {
-            return new ResponseModel<>("Error while editing personal personalData");
+            return new ResponseModel<>(ErrorMessages.InternalServerError);
         }
     }
 
@@ -80,7 +81,7 @@ public class PersonalDataResource {
         try {
             return new ResponseModel<>(service.delete(id));
         } catch (Exception ex) {
-            return new ResponseModel<>("Error while editing personal personalData");
+            return new ResponseModel<>(ErrorMessages.InternalServerError);
         }
     }
 }
